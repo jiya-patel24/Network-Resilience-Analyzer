@@ -24,6 +24,18 @@ class Graph:
            
         del self.adjacency_list[node_id]
 
+    def nodes(self):
+        """Return a list of every node currently in the graph."""
+        return list(self.adjacency_list.keys())
+    
+    def has_node(self, node_id):
+        """Check whether a node exists in the graph."""
+        return node_id in self.adjacency_list
+    
+    def degree(self, node_id):
+        """How many neighbors does this node currently have?"""
+        return len(self.get_neighbors(node_id))
+
 if __name__ == "__main__":
     g = Graph()
     g.add_edge(1, 2)
