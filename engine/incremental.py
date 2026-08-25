@@ -41,3 +41,24 @@ if __name__ == "__main__":
         print("PASS: incremental result matches full recompute.")
     else:
         print("FAIL: incremental result does NOT match full recompute.")
+
+        print()
+
+    # --- Second test: attach to an isolated node ---
+    g2 = Graph()
+    g2.add_edge(1, 2)
+    g2.add_node(10)  # node 10 is isolated, degree 0
+
+    critical_nodes_2 = find_articulation_points(g2)
+    print("Before addition (isolated attach test):", critical_nodes_2)
+
+    add_node_incremental(g2, new_node_id=11, attach_to=10, critical_nodes=critical_nodes_2)
+    print("After attaching new node 11 to isolated node 10:", critical_nodes_2)
+
+    full_recompute_2 = find_articulation_points(g2)
+    print("Full recompute result for comparison:           ", full_recompute_2)
+
+    if critical_nodes_2 == full_recompute_2:
+        print("PASS: node 10 correctly stayed non-critical.")
+    else:
+        print("FAIL: mismatch on isolated-attach case.")
