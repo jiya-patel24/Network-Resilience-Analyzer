@@ -24,7 +24,7 @@ These are planned next steps, not part of this submission yet.
 | Graph representation (`graph.py`) | Done |
 | Articulation point detection + severity scoring (`tarjan.py`) | Done |
 | Incremental updates on node addition (`incremental.py`) | Done |
-| Attack simulation (targeted vs. random failure) | Planned |
+| Attack simulation (targeted vs. random failure) | Done |
 | D3.js visualization dashboard | Planned |
 
 ## Scope decision: what "incremental" means here
@@ -41,6 +41,7 @@ This is a deliberate, locked design decision, not an oversight:
 graph.py         # Graph data structure (adjacency list): add/remove nodes and edges, get neighbors
 tarjan.py        # Articulation point detection (Tarjan's algorithm) + severity scoring
 incremental.py   # Incremental update logic for node additions only
+attack_simulation.py   # Simulates targeted vs. random node failure, reports damage comparison
 ```
 
 ## How to run
@@ -51,6 +52,7 @@ Each file has a built-in test at the bottom that runs automatically and prints a
 python graph.py         # demonstrates basic graph operations (add edges, remove a node, check neighbors)
 python tarjan.py         # runs articulation point detection on a sample graph and checks the result
 python incremental.py    # tests incremental node-addition updates against a full recompute, for two cases
+python attack_simulation.py   # compares damage from removing the worst critical node vs. a random node
 ```
 
 Requirements: Python 3, no external libraries.
