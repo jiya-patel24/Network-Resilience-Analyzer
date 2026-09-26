@@ -20,6 +20,7 @@ This repo currently contains the **core engine only** — the graded data struct
 | Articulation point detection + severity scoring (`tarjan.py`) | Done |
 | Incremental updates on node addition (`incremental.py`) | Done |
 | Attack simulation (targeted vs. random failure) | Done |
+| Test Edge cases for disconnected/single-node/complete graphs | Done |
 | D3.js visualization dashboard | Planned |
 
 ## Scope decision: what "incremental" means here
@@ -37,6 +38,7 @@ graph.py         # Graph data structure (adjacency list): add/remove nodes and e
 tarjan.py        # Articulation point detection (Tarjan's algorithm) + severity scoring
 incremental.py   # Incremental update logic for node additions only
 attack_simulation.py   # Simulates targeted vs. random node failure, reports damage comparison
+test_edge_cases.py      # Edge-case tests: disconnected graph, single-node graph, fully-connected graph
 ```
 
 ## How to run
@@ -48,6 +50,7 @@ python graph.py         # demonstrates basic graph operations (add edges, remove
 python tarjan.py         # runs articulation point detection on a sample graph and checks the result
 python incremental.py    # tests incremental node-addition updates against a full recompute, for two cases
 python attack_simulation.py   # compares damage from removing the worst critical node vs. a random node
+python test_edge_cases.py # tests tests for disconnected/single-node/complete graphs
 ```
 
 Requirements: Python 3, no external libraries.
