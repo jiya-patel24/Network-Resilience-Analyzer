@@ -12,12 +12,7 @@ A network (computer network, infrastructure, organization chart, etc.) usually h
 
 ## Current status
 
-This repo currently contains the **core engine only** — the graded data structures deliverable. It does **not** yet include:
-
-- The attack simulation layer (targeted vs. random node failure)
-- The D3.js visualization dashboard
-
-These are planned next steps, not part of this submission yet.
+This repo currently contains the **core engine only** — the graded data structures deliverable. The D3.js visualization dashboard is a separate, ungraded planned next step.
 
 | Component | Status |
 |---|---|
