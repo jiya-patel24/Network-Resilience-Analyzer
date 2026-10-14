@@ -1,0 +1,220 @@
+[
+  {
+    "event": "Initial network",
+    "state": {
+      "nodes": [
+        {
+          "id": 1,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 2,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 3,
+          "is_critical": true,
+          "severity": 2
+        },
+        {
+          "id": 4,
+          "is_critical": true,
+          "severity": 1
+        },
+        {
+          "id": 5,
+          "is_critical": false,
+          "severity": 0
+        }
+      ],
+      "edges": [
+        {
+          "source": 1,
+          "target": 2
+        },
+        {
+          "source": 1,
+          "target": 3
+        },
+        {
+          "source": 2,
+          "target": 3
+        },
+        {
+          "source": 3,
+          "target": 4
+        },
+        {
+          "source": 4,
+          "target": 5
+        }
+      ]
+    }
+  },
+  {
+    "event": "Node 6 joined the network (attached to node 5)",
+    "state": {
+      "nodes": [
+        {
+          "id": 1,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 2,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 3,
+          "is_critical": true,
+          "severity": 2
+        },
+        {
+          "id": 4,
+          "is_critical": true,
+          "severity": 2
+        },
+        {
+          "id": 5,
+          "is_critical": true,
+          "severity": 1
+        },
+        {
+          "id": 6,
+          "is_critical": false,
+          "severity": 0
+        }
+      ],
+      "edges": [
+        {
+          "source": 1,
+          "target": 2
+        },
+        {
+          "source": 1,
+          "target": 3
+        },
+        {
+          "source": 2,
+          "target": 3
+        },
+        {
+          "source": 3,
+          "target": 4
+        },
+        {
+          "source": 4,
+          "target": 5
+        },
+        {
+          "source": 5,
+          "target": 6
+        }
+      ]
+    }
+  },
+  {
+    "event": "Node 3 failed and was removed",
+    "state": {
+      "nodes": [
+        {
+          "id": 1,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 2,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 4,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 5,
+          "is_critical": true,
+          "severity": 2
+        },
+        {
+          "id": 6,
+          "is_critical": false,
+          "severity": 0
+        }
+      ],
+      "edges": [
+        {
+          "source": 1,
+          "target": 2
+        },
+        {
+          "source": 4,
+          "target": 5
+        },
+        {
+          "source": 5,
+          "target": 6
+        }
+      ]
+    }
+  },
+  {
+    "event": "Node 7 joined the network (attached to node 1)",
+    "state": {
+      "nodes": [
+        {
+          "id": 1,
+          "is_critical": true,
+          "severity": 2
+        },
+        {
+          "id": 2,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 4,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 5,
+          "is_critical": true,
+          "severity": 2
+        },
+        {
+          "id": 6,
+          "is_critical": false,
+          "severity": 0
+        },
+        {
+          "id": 7,
+          "is_critical": false,
+          "severity": 0
+        }
+      ],
+      "edges": [
+        {
+          "source": 1,
+          "target": 2
+        },
+        {
+          "source": 1,
+          "target": 7
+        },
+        {
+          "source": 4,
+          "target": 5
+        },
+        {
+          "source": 5,
+          "target": 6
+        }
+      ]
+    }
+  }
+]

@@ -3,64 +3,102 @@
 <head>
   <meta charset="utf-8">
   <title>Network Resilience Analyzer - Dashboard Skeleton</title>
-  <!-- D3 loaded from a CDN, pinned to v7 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <meta name="color-scheme" content="light">
 </head>
 <body>
-  <!-- The graph gets drawn inside this svg element -->
   <svg width="800" height="600"></svg>
 
   <script>
-    // d3.json fetches and parses the JSON file. It's asynchronous (takes time,
-    // doesn't block everything else), so we use .then() to say "once the file
-    // is loaded, do this with the result" — the result lands in the "graph" variable.
     d3.json("data.json").then(function (graph) {
 
       const svg = d3.select("svg");
       const width = +svg.attr("width");
       const height = +svg.attr("height");
+      svg.append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "#ffffff");
 
-      // A "force simulation" is D3's physics engine for graphs: it treats nodes
-      // like objects that repel each other (so they spread out) and edges like
-      // springs pulling connected nodes together. Every tiny time-step it nudges
-      // every node's x/y position a bit closer to a stable layout.
+      // Legend (static — not part of the force simulation, so it stays fixed in place)
+      const legend = svg.append("g").attr("transform", "translate(20, 20)");
+
+      const legendItems = [
+        { label: "Critical node (articulation point)", color: "#e63946" },
+        { label: "Normal node", color: "#457b9d" }
+      ];
+
+      legend.selectAll("circle")
+        .data(legendItems)
+        .join("circle")
+        .attr("cx", 8)
+        .attr("cy", (d, i) => i * 22)
+        .attr("r", 8)
+        .attr("fill", d => d.color);
+
+      legend.selectAll(".legend-text")
+        .data(legendItems)
+        .join("text")
+        .attr("class", "legend-text")
+        .attr("x", 22)
+        .attr("y", (d, i) => i * 22 + 4)
+        .attr("font-size", 12)
+        .attr("font-family", "sans-serif")
+        .attr("fill", "#1d1d1d")
+        .text(d => d.label);
+      
+      legend.append("text")
+        .attr("x", 0)
+        .attr("y", 55)
+        .attr("font-size", 12)
+        .attr("font-family", "sans-serif")
+        .text("Circle size = severity (bigger = more damaging if removed)");
+
+      // Size and color encodings
+      const BASE_RADIUS = 8;
+      const SEVERITY_SCALE = 4;
+      function radiusFor(d) {
+        return BASE_RADIUS + d.severity * SEVERITY_SCALE;
+      }
+
+      function colorFor(d) {
+        return d.is_critical ? "#e63946" : "#457b9d";
+      }
+
       const simulation = d3.forceSimulation(graph.nodes)
-        // "link" force: pulls connected nodes toward each other, like a spring.
-        // .id(d => d.id) tells D3 how to match an edge's "source"/"target" strings
-        // (e.g. "1") to the actual node object with that id.
         .force("link", d3.forceLink(graph.edges).id(d => d.id).distance(80))
-        // "charge" force: negative strength = nodes push each other away,
-        // so they don't all pile up in one spot.
         .force("charge", d3.forceManyBody().strength(-200))
-        // "center" force: gently pulls everything toward the middle of the svg
-        // so the whole graph doesn't drift off-screen.
         .force("center", d3.forceCenter(width / 2, height / 2));
 
-      // Draw one <line> per edge. We're not styling it beyond a basic stroke
-      // color so the lines are visible against the white background.
       const link = svg.append("g")
         .selectAll("line")
         .data(graph.edges)
         .join("line")
         .attr("stroke", "#999");
 
-      // Draw one <circle> per node. Fill color just distinguishes critical
-      // nodes (red) from normal ones (blue) for now — no real styling yet.
       const node = svg.append("g")
         .selectAll("circle")
         .data(graph.nodes)
         .join("circle")
-        .attr("r", 10)
-        .attr("fill", d => (d.is_critical ? "red" : "steelblue"));
+        .attr("r", d => radiusFor(d))
+        .attr("fill", d => colorFor(d))
+        .attr("stroke", "#1d1d1d")
+        .attr("stroke-width", 1);
 
-      // <title> makes the browser show a native tooltip on hover — just enough
-      // to confirm severity data actually made it into the page.
       node.append("title")
         .text(d => `node ${d.id} (severity: ${d.severity})`);
 
-      // The simulation doesn't move things instantly — it fires a "tick" event
-      // repeatedly as it recalculates positions. Each tick, we copy the newly
-      // computed x/y coordinates onto the actual SVG elements on screen.
+      const label = svg.append("g")
+        .selectAll("text")
+        .data(graph.nodes)
+        .join("text")
+        .text(d => d.id)
+        .attr("font-size", 10)
+        .attr("font-family", "sans-serif")
+        .attr("text-anchor", "middle")
+        .attr("fill", "#1d1d1d")
+        .attr("pointer-events", "none");
+
       simulation.on("tick", () => {
         link
           .attr("x1", d => d.source.x)
@@ -71,6 +109,10 @@
         node
           .attr("cx", d => d.x)
           .attr("cy", d => d.y);
+
+        label
+          .attr("x", d => d.x)
+          .attr("y", d => d.y + radiusFor(d) + 12);
       });
     });
   </script>
