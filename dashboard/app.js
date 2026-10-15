@@ -11,6 +11,8 @@ const MIN_RADIUS = 9;
 const MAX_RADIUS = 22;
 const HALO_EXTRA = 6;         // how far the soft ring sticks out around critical nodes
 
+const ISLAND_COLORS = 4;      // Stage 5: how many pastel tints cut-off pieces cycle through
+
 const PLAY_ICON =
   '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.8v8.4L10 6z" fill="currentColor"/></svg>';
 const PAUSE_ICON =
@@ -34,8 +36,27 @@ const prevBtn = document.getElementById("btn-prev");
 const nextBtn = document.getElementById("btn-next");
 const playBtn = document.getElementById("btn-play");
 
+// Stage 5: simulation card elements
+const simBannerEl = document.getElementById("sim-banner");
+const keyIslandEl = document.getElementById("key-island");
+const simModeTargetedBtn = document.getElementById("sim-mode-targeted");
+const simModeRandomBtn = document.getElementById("sim-mode-random");
+const simModeNoteEl = document.getElementById("sim-mode-note");
+const simRunBtn = document.getElementById("sim-run");
+const simResetBtn = document.getElementById("sim-reset");
+const simHintEl = document.getElementById("sim-hint");
+const simResultEl = document.getElementById("sim-result");
+const simResultTitleEl = document.getElementById("sim-result-title");
+const simStatCutEl = document.getElementById("sim-stat-cut");
+const simStatPiecesEl = document.getElementById("sim-stat-pieces");
+const simCompareEl = document.getElementById("sim-compare");
+const simFailedEl = document.getElementById("sim-failed");
+
+// The default "no critical nodes" sentence from index.html (we swap it only when the network is empty)
+const RANKING_EMPTY_TEXT = rankingEmptyEl.textContent.trim();
+
 // ---------- Things we keep between steps ----------
-let snapshots = [];           // the list of steps
+let snapshots = [];           // the list of steps (NEVER modified after loading)
 let currentIndex = 0;         // which step is showing
 let playing = false;
 let playTimer = null;
@@ -43,7 +64,7 @@ let hasRendered = false;
 
 let width = 0;                // canvas size in pixels
 let height = 0;
-let simulation, linkForce, chargeForce;
+let simulation, linkForce, chargeForce;   // simulation = the d3 physics engine (not the failure simulation)
 let edgeLayer, nodeLayer;
 
 // The d3 selections currently on screen (updated on every step)
@@ -60,6 +81,14 @@ let selectedId = null;
 // One persistent object per node ID. Reusing the same object between steps is
 // what lets a node stay where it was instead of jumping to a new position.
 const nodeById = new Map();
+
+// Stage 5: failure-simulation state. All of it belongs to ONE timeline step;
+// moving to another step wipes it (see goTo).
+let simMode = "targeted";     // "targeted" or "random"
+let simFailedIds = [];        // nodes failed so far in this simulation, in order
+let simView = null;           // { state, pieceCount } for the simulated network, or null
+let simLast = null;           // details of the most recent failure, for the result panel
+let simMessage = "";          // short status text shown under the buttons
 
 
 // ---------- Helper functions ----------
@@ -106,7 +135,8 @@ function updateStats(state) {
   const criticalCount = state.nodes.filter(n => n.is_critical).length;
   statsEl.innerHTML =
     `${state.nodes.length} nodes · ${state.edges.length} links · ` +
-    `<span class="stat-critical">${criticalCount} critical</span>`;
+    `<span class="stat-critical">${criticalCount} critical</span>` +
+    (isSimulating() ? ` · <span class="stat-sim">simulated</span>` : "");
 }
 
 
@@ -213,6 +243,10 @@ function renderRanking(nodes) {
 
   // No critical nodes: show the calm "all good" message instead of a list
   rankingEmptyEl.hidden = criticalNodes.length > 0;
+  // Stage 5: a simulation can remove every node, so say that instead of "all good"
+  rankingEmptyEl.textContent = nodes.length === 0
+    ? "No nodes left in the network."
+    : RANKING_EMPTY_TEXT;
 
   const maxSeverity = d3.max(criticalNodes, d => d.severity) || 1;
 
@@ -283,6 +317,7 @@ function clearSelection() {
 function refreshSelection() {
   applySelectionStyles();
   renderSelectedCard();
+  updateSimulationUI();   // Stage 5: the "Fail node X" button depends on the selection
 }
 
 // Mark the selected node in the graph and the selected row in the ranking.
@@ -373,6 +408,301 @@ function wireSelection() {
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") clearSelection();
   });
+}
+
+
+// ---------- Stage 5: failure simulation ----------
+//
+// How it works, in plain words:
+//   * The timeline snapshot (snapshots[currentIndex].state) is the ORIGINAL network. We never edit it.
+//   * A simulation is just a list of failed node IDs (simFailedIds).
+//   * To show the simulated network we take the original, leave out the failed nodes (and their
+//     links), re-run the same critical-node analysis the Python engine uses, and hand the result
+//     to the normal renderState(). Reset = render the original again.
+
+function isSimulating() {
+  return simFailedIds.length > 0;
+}
+
+function getBaseState() {
+  return snapshots[currentIndex].state;
+}
+
+// What is on screen right now: the simulated network if there is one, else the snapshot.
+function getDisplayedState() {
+  return simView ? simView.state : getBaseState();
+}
+
+// Turn a state into { nodeId: [neighbour ids] }, leaving out any removed nodes.
+function buildAdjacency(state, removedIds) {
+  const adjacency = new Map();
+  state.nodes.forEach(n => {
+    if (!removedIds.has(n.id)) adjacency.set(n.id, []);
+  });
+  state.edges.forEach(e => {
+    if (adjacency.has(e.source) && adjacency.has(e.target)) {
+      adjacency.get(e.source).push(e.target);
+      adjacency.get(e.target).push(e.source);
+    }
+  });
+  return adjacency;
+}
+
+// Split the network into connected "pieces" (breadth-first search).
+// skipId (optional) = pretend that node doesn't exist.
+function findComponents(adjacency, skipId) {
+  const seen = new Set();
+  if (skipId !== undefined) seen.add(skipId);
+
+  const pieces = [];
+  for (const start of adjacency.keys()) {
+    if (seen.has(start)) continue;
+
+    const queue = [start];
+    seen.add(start);
+    for (let i = 0; i < queue.length; i++) {
+      for (const neighbor of adjacency.get(queue[i])) {
+        if (!seen.has(neighbor)) {
+          seen.add(neighbor);
+          queue.push(neighbor);
+        }
+      }
+    }
+    pieces.push(queue);
+  }
+  return pieces;
+}
+
+// Same rule as _compute_severity in tarjan.py:
+// (nodes left after removal) minus (size of the biggest remaining piece).
+function severityIfRemoved(adjacency, nodeId) {
+  const pieces = findComponents(adjacency, nodeId);
+  if (pieces.length === 0) return 0;
+
+  const sizes = pieces.map(piece => piece.length);
+  const total = sizes.reduce((sum, size) => sum + size, 0);
+  return total - Math.max(...sizes);
+}
+
+// Same logic as find_articulation_points in tarjan.py (disc / low values).
+function findCriticalIds(adjacency) {
+  const disc = new Map();
+  const low = new Map();
+  const critical = new Set();
+  let timer = 0;
+
+  function dfs(u, parent) {
+    disc.set(u, timer);
+    low.set(u, timer);
+    timer++;
+    let children = 0;
+
+    for (const neighbor of adjacency.get(u)) {
+      if (neighbor === parent) continue;
+
+      if (disc.has(neighbor)) {
+        low.set(u, Math.min(low.get(u), disc.get(neighbor)));
+      } else {
+        children++;
+        dfs(neighbor, u);
+        low.set(u, Math.min(low.get(u), low.get(neighbor)));
+
+        if (parent === null && children >= 2) critical.add(u);
+        if (parent !== null && low.get(neighbor) >= disc.get(u)) critical.add(u);
+      }
+    }
+  }
+
+  for (const node of adjacency.keys()) {
+    if (!disc.has(node)) dfs(node, null);
+  }
+  return critical;
+}
+
+// Original snapshot minus the failed nodes, with fresh critical flags and severities.
+// Returns a NEW state object in the same shape as a snapshot (plus an optional "island"
+// tint number on nodes). The original state is only read, never changed.
+function buildSimulatedState(baseState, failedIds) {
+  const removed = new Set(failedIds);
+  const adjacency = buildAdjacency(baseState, removed);
+  const criticalIds = findCriticalIds(adjacency);
+  const pieces = findComponents(adjacency);
+
+  // Biggest piece = "main network" (no tint). Every other piece gets a pastel tint.
+  const islandOf = new Map();
+  pieces
+    .slice()
+    .sort((a, b) => b.length - a.length)
+    .slice(1)
+    .forEach((piece, index) => {
+      piece.forEach(id => islandOf.set(id, index % ISLAND_COLORS));
+    });
+
+  const nodes = baseState.nodes
+    .filter(n => !removed.has(n.id))
+    .map(n => {
+      const isCritical = criticalIds.has(n.id);
+      return {
+        id: n.id,
+        is_critical: isCritical,
+        severity: isCritical ? severityIfRemoved(adjacency, n.id) : 0,
+        island: islandOf.has(n.id) ? islandOf.get(n.id) : null
+      };
+    });
+
+  const edges = baseState.edges
+    .filter(e => !removed.has(e.source) && !removed.has(e.target))
+    .map(e => ({ source: e.source, target: e.target }));
+
+  return { state: { nodes, edges }, pieceCount: pieces.length };
+}
+
+// Forget the simulation (does NOT redraw anything by itself).
+function clearSimulationState() {
+  simFailedIds = [];
+  simView = null;
+  simLast = null;
+  simMessage = "";
+}
+
+function setSimMode(mode) {
+  simMode = mode;
+  simMessage = "";
+  updateSimulationUI();
+}
+
+// The main action: fail one node (the selected one, or a random one).
+function runFailure() {
+  const displayed = getDisplayedState();
+
+  // Edge case: nothing left to fail
+  if (displayed.nodes.length === 0) {
+    simMessage = "No nodes left to fail. Reset the simulation to bring them back.";
+    updateSimulationUI();
+    return;
+  }
+
+  let targetId;
+  if (simMode === "targeted") {
+    // Edge case: targeted mode needs a selected node that still exists
+    if (selectedId === null || !displayed.nodes.some(n => n.id === selectedId)) {
+      simMessage = "Select a node on the graph or in the ranking first.";
+      updateSimulationUI();
+      return;
+    }
+    targetId = selectedId;
+  } else {
+    const pick = Math.floor(Math.random() * displayed.nodes.length);
+    targetId = displayed.nodes[pick].id;
+  }
+
+  // The severity the ranking was showing for this node right before it fails
+  const failedNode = displayed.nodes.find(n => n.id === targetId);
+  const cutOff = failedNode.severity;
+  const mode = simMode;
+
+  stopPlaying();   // a simulation and auto-playback shouldn't fight over the screen
+
+  simFailedIds = [...simFailedIds, targetId];
+  simView = buildSimulatedState(getBaseState(), simFailedIds);
+  simLast = {
+    id: targetId,
+    mode: mode,
+    cutOff: cutOff,
+    pieces: simView.pieceCount,
+    round: simFailedIds.length
+  };
+  simMessage = "";
+
+  renderState(simView.state);   // redraws graph, stats, ranking, selected card, and this card
+
+  // If the Fail button just got disabled (targeted failure clears the selection),
+  // move keyboard focus somewhere useful instead of losing it.
+  if (simRunBtn.disabled) simResetBtn.focus();
+}
+
+// Back to the untouched snapshot. Timeline position does not change.
+function resetSimulation() {
+  if (!isSimulating()) return;
+
+  clearSimulationState();
+  simMessage = `Reset. Showing the original network for step ${currentIndex + 1} again.`;
+  renderState(getBaseState());
+
+  (simRunBtn.disabled ? simModeTargetedBtn : simRunBtn).focus();
+}
+
+// Updates every piece of the Simulation card (and the "this is simulated" markers).
+// It only changes text and attributes, never rebuilds the buttons, so keyboard focus stays put.
+function updateSimulationUI() {
+  const simulating = isSimulating();
+  const displayed = getDisplayedState();
+  const noNodes = displayed.nodes.length === 0;
+  const targeted = simMode === "targeted";
+  const hasSelection = selectedId !== null && displayed.nodes.some(n => n.id === selectedId);
+
+  // Mode switch
+  simModeTargetedBtn.classList.toggle("is-on", targeted);
+  simModeTargetedBtn.setAttribute("aria-pressed", String(targeted));
+  simModeRandomBtn.classList.toggle("is-on", !targeted);
+  simModeRandomBtn.setAttribute("aria-pressed", String(!targeted));
+
+  simModeNoteEl.textContent = targeted
+    ? "Fails the node you have selected, like an attacker aiming at one chosen target."
+    : "Fails any node still in the network, picked by chance, like an accidental outage.";
+
+  // Buttons
+  if (targeted) {
+    simRunBtn.textContent = hasSelection ? `Fail node ${selectedId}` : "Fail selected node";
+  } else {
+    simRunBtn.textContent = "Fail a random node";
+  }
+  simRunBtn.disabled = noNodes || (targeted && !hasSelection);
+  simResetBtn.disabled = !simulating;
+
+  // Hint line under the buttons
+  let hint = simMessage;
+  if (noNodes) {
+    hint = "No nodes left to fail. Reset the simulation to bring them back.";
+  } else if (targeted && !hasSelection) {
+    hint = "Select a node on the graph or in the ranking first.";
+  }
+  simHintEl.textContent = hint;
+
+  // Result panel
+  simResultEl.hidden = !simulating || simLast === null;
+  if (simulating && simLast) {
+    const modeLabel = simLast.mode === "targeted" ? "targeted" : "random";
+    simResultTitleEl.textContent = `Node ${simLast.id} failed · ${modeLabel}`;
+    simStatCutEl.textContent = String(simLast.cutOff);
+    simStatPiecesEl.textContent = String(simView.pieceCount);
+
+    const base = getBaseState();
+    const baseCritical = base.nodes.filter(n => n.is_critical).length;
+    const nowCritical = simView.state.nodes.filter(n => n.is_critical).length;
+    simCompareEl.textContent =
+      `Compared with the original: ${base.nodes.length} → ${simView.state.nodes.length} nodes, ` +
+      `${baseCritical} → ${nowCritical} critical.`;
+
+    simFailedEl.innerHTML = "";
+    simFailedIds.forEach(id => simFailedEl.appendChild(makeEl("span", "sim-tag", String(id))));
+  }
+
+  // "This is a simulation" markers on the canvas
+  canvasEl.classList.toggle("is-simulated", simulating);
+  simBannerEl.hidden = !simulating;
+  if (simulating) {
+    simBannerEl.textContent =
+      `Simulated · step ${currentIndex + 1} of ${snapshots.length} · ${simFailedIds.length} failed`;
+  }
+  keyIslandEl.hidden = !(simulating && simView.pieceCount > 1);
+}
+
+function wireSimulation() {
+  simModeTargetedBtn.addEventListener("click", () => setSimMode("targeted"));
+  simModeRandomBtn.addEventListener("click", () => setSimMode("random"));
+  simRunBtn.addEventListener("click", runFailure);
+  simResetBtn.addEventListener("click", resetSimulation);
 }
 
 
@@ -483,6 +813,7 @@ function createNodeGroups(enterSelection) {
 }
 
 // Shows one step of the story: updates the graph, counts, ranking and selected card.
+// (Stage 5: also used to show a simulated network. It only READS the state it is given.)
 function renderState(state) {
   // Cancel any hover state left over from the previous step
   tooltipEl.classList.remove("is-visible");
@@ -504,6 +835,7 @@ function renderState(state) {
     }
     node.is_critical = n.is_critical;
     node.severity = n.severity;
+    node.island = n.island === undefined ? null : n.island;   // Stage 5: tint for cut-off pieces
     return node;
   });
 
@@ -547,6 +879,7 @@ function renderState(state) {
 
   // 4. Apply this step's look to every node: colour, size, label
   nodeSel.classed("is-critical", d => d.is_critical);
+  nodeSel.attr("data-island", d => (d.island === null ? null : d.island));   // Stage 5
 
   nodeSel.select(".node-halo")
     .transition().duration(TRANSITION_MS).ease(d3.easeCubicOut)
@@ -567,6 +900,7 @@ function renderState(state) {
 
   // 5b. Selection: keep it if the node still exists, clear it if it was removed.
   //     (nodeById already had removed nodes deleted at the top of this function.)
+  //     refreshSelection() also refreshes the Simulation card (Stage 5).
   if (selectedId !== null && !nodeById.has(selectedId)) selectedId = null;
   refreshSelection();   // restyle graph + ranking, and rebuild the card with this step's numbers
 
@@ -647,6 +981,11 @@ function updatePlayButton() {
 }
 
 function goTo(index) {
+  // Stage 5: a simulation belongs to one step, so leave it behind when the step changes.
+  const hadSimulation = isSimulating();
+  clearSimulationState();
+  if (hadSimulation) simMessage = "You moved to another step, so the simulation was cleared.";
+
   currentIndex = index;
   renderState(snapshots[index].state);
   updateTimelineUI();
@@ -719,6 +1058,7 @@ function start(data) {
   buildTrack();
   wireControls();
   wireSelection();
+  wireSimulation();   // Stage 5
   goTo(0);
 }
 

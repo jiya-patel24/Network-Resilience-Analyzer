@@ -13,6 +13,7 @@
 
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="selected.css">
+  <link rel="stylesheet" href="simulation.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 <body>
@@ -33,6 +34,9 @@
       <div class="panel canvas" id="canvas">
         <span class="eyebrow canvas-label">Network graph</span>
 
+        <!-- Stage 5: shown only while a simulation is active -->
+        <div class="sim-banner" id="sim-banner" role="status" hidden></div>
+
         <svg id="graph" role="img" aria-label="Network graph. Larger red-brown circles are critical nodes."></svg>
 
         <!-- Compact legend -->
@@ -42,6 +46,8 @@
           <span class="key-item">
             <span class="dot dot-small"></span><span class="dot dot-large"></span>Size = severity
           </span>
+          <!-- Stage 5: only visible when a simulation has split the network -->
+          <span class="key-item" id="key-island" hidden><span class="dot dot-island"></span>Cut-off piece</span>
         </div>
 
         <!-- Custom hover tooltip (filled by app.js) -->
@@ -100,9 +106,45 @@
         <div id="selected-body" aria-live="polite"></div>
       </section>
 
-      <section class="side-section">
+      <!-- Stage 5: Simulation card. app.js fills in the text and enables/disables the buttons. -->
+      <section class="side-section" id="simulation-section">
         <span class="eyebrow">Simulation</span>
-        <p class="placeholder">Targeted vs random failure will appear here.</p>
+        <p class="sim-intro">
+          Fail a node and watch the network react. This is a what-if view only:
+          the original timeline is never changed.
+        </p>
+
+        <div class="sim-modes" role="group" aria-label="Failure mode">
+          <button class="sim-mode is-on" id="sim-mode-targeted" type="button" aria-pressed="true">Targeted</button>
+          <button class="sim-mode" id="sim-mode-random" type="button" aria-pressed="false">Random</button>
+        </div>
+        <p class="sim-mode-note" id="sim-mode-note"></p>
+
+        <div class="sim-actions">
+          <button class="sim-run" id="sim-run" type="button"></button>
+          <button class="sim-reset" id="sim-reset" type="button">Reset simulation</button>
+        </div>
+        <p class="sim-hint" id="sim-hint" aria-live="polite"></p>
+
+        <div class="sim-result" id="sim-result" aria-live="polite" hidden>
+          <h3 class="sim-result-title" id="sim-result-title"></h3>
+
+          <div class="sel-stats">
+            <div class="sel-stat">
+              <span class="sel-stat-value" id="sim-stat-cut"></span>
+              <span class="sel-stat-label">Nodes cut off</span>
+            </div>
+            <div class="sel-stat">
+              <span class="sel-stat-value" id="sim-stat-pieces"></span>
+              <span class="sel-stat-label">Separate pieces</span>
+            </div>
+          </div>
+
+          <p class="sel-note" id="sim-compare"></p>
+
+          <span class="sel-sub">Failed so far</span>
+          <div class="sim-failed" id="sim-failed"></div>
+        </div>
       </section>
 
     </aside>

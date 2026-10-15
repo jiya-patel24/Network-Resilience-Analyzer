@@ -1,0 +1,177 @@
+/* =========================================================
+   Stage 5: Simulation card + "simulated view" markers
+   Loaded AFTER styles.css and selected.css.
+   Reuses .sel-stats / .sel-stat / .sel-note / .sel-sub from selected.css.
+   ========================================================= */
+
+/* Safety net: make the HTML "hidden" attribute always win, even on
+   elements that have their own display rule (e.g. .message, .sim-banner). */
+[hidden] { display: none !important; }
+
+/* ---------- Card text ---------- */
+.sim-intro {
+  margin: 8px 0 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+/* ---------- Mode switch (two-option pill) ---------- */
+.sim-modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--card-mint-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .55);
+}
+
+.sim-mode {
+  height: 30px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms var(--ease), color 150ms var(--ease);
+}
+.sim-mode:hover { color: var(--ink); }
+.sim-mode.is-on {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(30, 27, 23, .10);
+}
+.sim-mode:focus-visible,
+.sim-run:focus-visible,
+.sim-reset:focus-visible {
+  outline: 2px solid var(--lilac);
+  outline-offset: 2px;
+}
+
+.sim-mode-note {
+  margin: 10px 0 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+/* ---------- Buttons ---------- */
+.sim-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sim-run,
+.sim-reset {
+  height: 36px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms var(--ease), opacity 150ms var(--ease);
+}
+
+.sim-run {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: var(--clay);
+  color: var(--surface);
+}
+.sim-run:hover:not(:disabled) { background: #B04A31; }
+
+.sim-reset {
+  padding: 0 14px;
+  border: 1px solid var(--card-mint-line);
+  background: var(--surface);
+  color: var(--ink);
+  white-space: nowrap;
+}
+.sim-reset:hover:not(:disabled) { background: #fff; }
+
+.sim-run:disabled,
+.sim-reset:disabled { opacity: 0.4; cursor: default; }
+
+.sim-hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+.sim-hint:empty { display: none; }
+
+/* ---------- Result ---------- */
+.sim-result {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--card-mint-line);
+}
+
+.sim-result-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.sim-failed {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sim-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border: 1px solid var(--card-mint-line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.sim-tag::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--clay);
+}
+
+/* ---------- "This is a simulation" markers ---------- */
+.canvas.is-simulated {
+  border: 1px dashed var(--clay);
+  background: #FDF8F4;
+}
+
+.sim-banner {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  padding: 4px 12px;
+  border: 1px solid rgba(196, 85, 58, .35);
+  border-radius: 999px;
+  background: var(--clay-soft);
+  color: #8F3A25;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.stat-sim { color: #8F3A25; }
+
+/* ---------- Cut-off pieces: tint normal nodes by piece (critical stays clay) ---------- */
+.node[data-island="0"]:not(.is-critical) .node-body { fill: var(--island-periwinkle); }
+.node[data-island="1"]:not(.is-critical) .node-body { fill: var(--island-mint); }
+.node[data-island="2"]:not(.is-critical) .node-body { fill: var(--island-butter); }
+.node[data-island="3"]:not(.is-critical) .node-body { fill: var(--island-peach); }
+
+.dot-island { width: 10px; height: 10px; background: var(--island-periwinkle); }
