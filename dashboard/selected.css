@@ -1,0 +1,133 @@
+/* =========================================================
+   Stage 4: selection + "Selected node" card
+   Loaded AFTER styles.css, so these rules win where they overlap.
+   ========================================================= */
+
+/* ---------- Things you can now click ---------- */
+.node { cursor: pointer; }
+.rank-row { cursor: pointer; }
+
+/* Selected node in the graph: thick lilac outline */
+.node.is-selected .node-body {
+  stroke: var(--lilac);
+  stroke-width: 3.5;
+}
+
+/* Selected row in the ranking: brighter background + lilac bar on the left */
+.rank-row.is-selected {
+  background: rgba(255, 255, 255, .85);
+  box-shadow: inset 3px 0 0 var(--lilac);
+}
+
+.rank-row:focus-visible {
+  outline: 2px solid var(--lilac);
+  outline-offset: 1px;
+}
+
+/* ---------- The lilac card ---------- */
+.sel-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sel-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.sel-badge {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .7);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--sage-stroke);
+}
+.sel-badge.is-critical {
+  background: var(--clay-soft);
+  color: var(--clay);
+}
+
+/* Two number tiles side by side */
+.sel-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 14px 0 10px;
+}
+
+.sel-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .65);
+}
+
+.sel-stat-value {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.sel-stat-label {
+  font-size: 11px;
+  color: var(--ink-2);
+}
+
+.sel-note {
+  margin: 0 0 14px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.sel-sub {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+
+/* Neighbour buttons */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border: 1px solid var(--card-lilac-line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 150ms var(--ease), background 150ms var(--ease);
+}
+.chip:hover { border-color: var(--lilac); background: #fff; }
+.chip:focus-visible { outline: 2px solid var(--lilac); outline-offset: 2px; }
+
+/* Small dot inside the button: sage = normal neighbour, clay = critical neighbour */
+.chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sage);
+}
+.chip.is-critical .chip-dot { background: var(--clay); }

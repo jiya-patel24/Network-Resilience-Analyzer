@@ -1,0 +1,555 @@
+:root {
+  /* Surfaces and lines */
+  --paper: #F4F1EB;
+  --surface: #FBFAF7;
+  --sunk: #EFEBE3;
+  --hairline: #E2DCD0;
+  --edge: #CFC7B8;
+
+  /* Text */
+  --ink: #1E1B17;
+  --ink-2: #6A645A;
+  --ink-3: #9A9387;
+
+  /* Meaning colours */
+  --clay: #C4553A;          /* critical nodes */
+  --clay-soft: #F3D9CF;
+  --sage: #A3B09A;          /* normal nodes */
+  --sage-stroke: #5E6B58;
+  --moss: #5F7A55;          /* healthy states */
+  --lilac: #8C7FB8;         /* hover / selection */
+  --lilac-soft: #E6E1F2;
+
+  /* Pastels for separated network pieces (used in the simulation stage) */
+  --island-peach: #F6D6C6;
+  --island-mint: #CFE6DA;
+  --island-periwinkle: #D5DBF0;
+  --island-butter: #F4E7BE;
+
+  /* Soft card tints for the right-hand panels */
+  --card-peach: #F8E9E0;
+  --card-peach-line: #EBD9CC;
+  --card-lilac: #ECE8F5;
+  --card-lilac-line: #DCD6EC;
+  --card-mint: #E6F0E9;
+  --card-mint-line: #D3E2D8;
+
+  /* Fonts */
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, Consolas, monospace;
+
+  /* Shape and motion */
+  --radius: 14px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --fade: 300ms;
+  --shadow-float: 0 1px 2px rgba(30, 27, 23, .06), 0 8px 24px rgba(30, 27, 23, .08);
+}
+
+/* ---------- Page ---------- */
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  display: grid;
+  grid-template-rows: 76px 1fr;
+  /* Two faint warm washes (peach top-left, lilac top-right) over flat paper */
+  background:
+    radial-gradient(900px 520px at 0% 0%, rgba(236, 180, 150, .20), transparent 70%),
+    radial-gradient(800px 480px at 100% 0%, rgba(160, 150, 215, .16), transparent 70%),
+    var(--paper);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Top bar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.brand { display: flex; align-items: baseline; gap: 16px; }
+
+.brand-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.brand-sub {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* The counts sit in a small pill, like the reference's nav chips */
+.stats {
+  margin: 0;
+  padding: 5px 14px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.stats:empty { display: none; }
+.stats .stat-critical { color: var(--clay); }
+
+/* ---------- Layout ---------- */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 16px;
+  padding: 0 24px 24px;
+  min-height: 0;            /* lets children shrink instead of stretching the page */
+}
+
+.main-col {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 16px;
+  min-height: 0;
+}
+
+/* ---------- Panels ---------- */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+}
+
+/* Small uppercase label with a coloured dot in front */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+.eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-3);
+}
+
+/* Placeholder text is serif so the empty cards already feel editorial */
+.placeholder {
+  margin: 10px 0 0;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+
+/* Right column: three separate tinted cards instead of one big panel */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  min-height: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+.side-section {
+  padding: 18px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+}
+
+.side-section:nth-child(1) { background: var(--card-peach); border-color: var(--card-peach-line); }
+.side-section:nth-child(2) { background: var(--card-lilac); border-color: var(--card-lilac-line); }
+.side-section:nth-child(3) { background: var(--card-mint);  border-color: var(--card-mint-line); }
+
+.side-section:nth-child(1) .eyebrow::before { background: var(--clay); }
+.side-section:nth-child(2) .eyebrow::before { background: var(--lilac); }
+.side-section:nth-child(3) .eyebrow::before { background: var(--moss); }
+
+/* ---------- Timeline ---------- */
+.timeline {
+  display: grid;
+  gap: 12px;
+  padding: 14px 18px 16px;
+}
+
+.timeline-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  min-width: 0;
+}
+
+.timeline-caption {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeline-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.timeline-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn,
+.play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background 150ms var(--ease), opacity 150ms var(--ease);
+}
+
+.icon-btn {
+  width: 32px;
+  padding: 0;
+  border: 1px solid var(--hairline);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+}
+.icon-btn:hover:not(:disabled) { background: var(--sunk); }
+
+.play-btn {
+  gap: 7px;
+  min-width: 92px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 13px;
+  font-weight: 500;
+}
+.play-btn:hover:not(:disabled) { opacity: 0.88; }
+
+.icon-btn:disabled,
+.play-btn:disabled { opacity: 0.35; cursor: default; }
+
+.icon-btn:focus-visible,
+.play-btn:focus-visible,
+.track-dot:focus-visible {
+  outline: 2px solid var(--lilac);
+  outline-offset: 2px;
+}
+
+/* The track: a line with one dot per event */
+.track {
+  position: relative;
+  flex: 1;
+  height: 24px;
+  margin-left: 10px;
+}
+
+.track-line,
+.track-progress {
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+}
+.track-line { right: 6px; background: var(--hairline); }
+.track-progress {
+  width: calc((100% - 12px) * var(--p, 0));
+  background: var(--ink-2);
+  transition: width 400ms var(--ease);
+}
+
+.track-dots {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.track-dot {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 2px solid var(--ink-3);
+  border-radius: 50%;
+  background: var(--surface);
+  cursor: pointer;
+  transition: transform 200ms var(--ease), background 200ms var(--ease), border-color 200ms var(--ease);
+}
+.track-dot.is-past { background: var(--ink-2); border-color: var(--ink-2); }
+.track-dot.is-current { background: var(--ink); border-color: var(--ink); transform: scale(1.4); }
+
+/* ---------- Ranking card ---------- */
+.ranking-note {
+  margin: 8px 0 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.ranking-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rank-row {
+  display: grid;
+  grid-template-columns: 16px 62px 1fr 28px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin: 0 -10px;               /* so the hover background reaches past the card padding edge */
+  border-radius: 8px;
+  cursor: default;
+  transition: background 150ms var(--ease);
+}
+.rank-row.is-active { background: rgba(255, 255, 255, .65); }
+
+.rank-pos {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+.rank-name {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.rank-bar {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(30, 27, 23, .08);
+  overflow: hidden;
+}
+.rank-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--clay);
+}
+
+.rank-value {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  line-height: 1;
+  text-align: right;
+}
+
+.ranking-empty {
+  margin: 4px 0 0;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--moss);
+}
+
+/* ---------- Graph canvas ---------- */
+.canvas {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.canvas-label {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+}
+.canvas-label::before { background: var(--sage-stroke); }
+
+#graph {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Edges */
+.edge {
+  stroke: var(--edge);
+  stroke-width: 1.25;
+  transition: opacity var(--fade) var(--ease);
+}
+
+/* Nodes: normal by default, critical when the group has .is-critical */
+.node {
+  cursor: default;
+  transition: opacity var(--fade) var(--ease);
+}
+
+.node-body {
+  fill: var(--sage);
+  stroke: var(--sage-stroke);
+  stroke-width: 1;
+  transition: fill var(--fade) var(--ease), stroke var(--fade) var(--ease);
+}
+
+/* Soft ring around critical nodes. Present on every node, but invisible unless critical */
+.node-halo {
+  fill: var(--clay);
+  opacity: 0.16;
+  pointer-events: none;
+  transition: opacity var(--fade) var(--ease);
+}
+.node:not(.is-critical) .node-halo { opacity: 0; }
+
+.node.is-critical .node-body {
+  fill: var(--clay);
+  stroke: #8F3A25;
+}
+
+/* Hover focus: everything not related to the hovered node fades back */
+.node.is-dimmed,
+.edge.is-dimmed { opacity: 0.22; }
+
+.node.is-active .node-body {
+  stroke: var(--lilac);
+  stroke-width: 2.5;
+}
+
+/* New elements start invisible and fade in; leaving elements fade out.
+   (These come AFTER the dimmed rule so they win.) */
+.node.is-entering,
+.edge.is-entering,
+.node.is-leaving,
+.edge.is-leaving { opacity: 0; }
+
+.node.is-leaving,
+.edge.is-leaving { pointer-events: none; }
+
+/* Node ID text */
+.node-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-anchor: middle;
+  fill: var(--ink);
+  pointer-events: none;
+}
+.node.is-critical .node-label.inside { fill: var(--surface); }
+
+/* Labels that don't fit inside a node appear below it, only on hover */
+.node-label.outside {
+  opacity: 0;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+  transition: opacity 150ms var(--ease);
+}
+.node-label.outside.is-visible { opacity: 1; }
+
+/* ---------- Legend ---------- */
+.key {
+  position: absolute;
+  left: 18px;
+  bottom: 16px;
+  display: flex;
+  gap: 18px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.key-item { display: inline-flex; align-items: center; gap: 6px; }
+
+.dot {
+  display: inline-block;
+  border-radius: 50%;
+  border: 1px solid var(--sage-stroke);
+  background: var(--sage);
+}
+.dot-critical { width: 10px; height: 10px; background: var(--clay); border-color: #8F3A25; }
+.dot-normal   { width: 10px; height: 10px; }
+.dot-small    { width: 6px;  height: 6px; }
+.dot-large    { width: 12px; height: 12px; margin-right: 2px; }
+
+/* ---------- Tooltip ---------- */
+.tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  box-shadow: var(--shadow-float);
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms var(--ease);
+  white-space: nowrap;
+}
+.tooltip.is-visible { opacity: 1; }
+.tip-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.tip-row {
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  color: var(--ink-2);
+}
+.tip-row.is-critical { color: var(--clay); }
+
+/* ---------- Error / empty message ---------- */
+.message {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--ink-2);
+}
+
+/* ---------- Narrow screens: stack the columns ---------- */
+@media (max-width: 1100px) {
+  html, body { height: auto; }
+  body { grid-template-rows: auto auto; }
+  .topbar { flex-wrap: wrap; gap: 8px 16px; padding: 16px; }
+  .layout { grid-template-columns: 1fr; padding: 0 16px 16px; }
+  .main-col { grid-template-rows: 60vh auto; }
+  .side { overflow: visible; }
+}
+
+/* ---------- Respect "reduce motion" system setting ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

@@ -1,120 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Network Resilience Analyzer - Dashboard Skeleton</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
+  <title>Network Resilience Analyzer</title>
+
+  <!-- Fonts (needs internet for now; we'll self-host them in the polish stage) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="selected.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 <body>
-  <svg width="800" height="600"></svg>
 
-  <script>
-    d3.json("data.json").then(function (graph) {
+  <header class="topbar">
+    <div class="brand">
+      <h1 class="brand-title">Network Resilience Analyzer</h1>
+      <p class="brand-sub">Single points of failure, ranked by impact</p>
+    </div>
+    <p class="stats" id="stats" aria-live="polite"></p>
+  </header>
 
-      const svg = d3.select("svg");
-      const width = +svg.attr("width");
-      const height = +svg.attr("height");
-      svg.append("rect")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("fill", "#ffffff");
+  <main class="layout">
 
-      // Legend (static — not part of the force simulation, so it stays fixed in place)
-      const legend = svg.append("g").attr("transform", "translate(20, 20)");
+    <!-- LEFT COLUMN: graph + timeline -->
+    <section class="main-col">
 
-      const legendItems = [
-        { label: "Critical node (articulation point)", color: "#e63946" },
-        { label: "Normal node", color: "#457b9d" }
-      ];
+      <div class="panel canvas" id="canvas">
+        <span class="eyebrow canvas-label">Network graph</span>
 
-      legend.selectAll("circle")
-        .data(legendItems)
-        .join("circle")
-        .attr("cx", 8)
-        .attr("cy", (d, i) => i * 22)
-        .attr("r", 8)
-        .attr("fill", d => d.color);
+        <svg id="graph" role="img" aria-label="Network graph. Larger red-brown circles are critical nodes."></svg>
 
-      legend.selectAll(".legend-text")
-        .data(legendItems)
-        .join("text")
-        .attr("class", "legend-text")
-        .attr("x", 22)
-        .attr("y", (d, i) => i * 22 + 4)
-        .attr("font-size", 12)
-        .attr("font-family", "sans-serif")
-        .attr("fill", "#1d1d1d")
-        .text(d => d.label);
-      
-      legend.append("text")
-        .attr("x", 0)
-        .attr("y", 55)
-        .attr("font-size", 12)
-        .attr("font-family", "sans-serif")
-        .text("Circle size = severity (bigger = more damaging if removed)");
+        <!-- Compact legend -->
+        <div class="key" aria-hidden="true">
+          <span class="key-item"><span class="dot dot-critical"></span>Critical node</span>
+          <span class="key-item"><span class="dot dot-normal"></span>Normal node</span>
+          <span class="key-item">
+            <span class="dot dot-small"></span><span class="dot dot-large"></span>Size = severity
+          </span>
+        </div>
 
-      // Size and color encodings
-      const BASE_RADIUS = 8;
-      const SEVERITY_SCALE = 4;
-      function radiusFor(d) {
-        return BASE_RADIUS + d.severity * SEVERITY_SCALE;
-      }
+        <!-- Custom hover tooltip (filled by app.js) -->
+        <div class="tooltip" id="tooltip" role="tooltip"></div>
 
-      function colorFor(d) {
-        return d.is_critical ? "#e63946" : "#457b9d";
-      }
+        <!-- Shown only if the data files fail to load -->
+        <div class="message" id="message" hidden></div>
+      </div>
 
-      const simulation = d3.forceSimulation(graph.nodes)
-        .force("link", d3.forceLink(graph.edges).id(d => d.id).distance(80))
-        .force("charge", d3.forceManyBody().strength(-200))
-        .force("center", d3.forceCenter(width / 2, height / 2));
+      <!-- Timeline: playback controls, event track, caption -->
+      <div class="panel timeline">
+        <div class="timeline-head">
+          <span class="eyebrow">Timeline</span>
+          <p class="timeline-caption" id="timeline-caption" aria-live="polite"></p>
+          <span class="timeline-count" id="timeline-count"></span>
+        </div>
 
-      const link = svg.append("g")
-        .selectAll("line")
-        .data(graph.edges)
-        .join("line")
-        .attr("stroke", "#999");
+        <div class="timeline-controls">
+          <button class="icon-btn" id="btn-prev" type="button" aria-label="Previous event">
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+              <path d="M9 2.5 4.5 7 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
 
-      const node = svg.append("g")
-        .selectAll("circle")
-        .data(graph.nodes)
-        .join("circle")
-        .attr("r", d => radiusFor(d))
-        .attr("fill", d => colorFor(d))
-        .attr("stroke", "#1d1d1d")
-        .attr("stroke-width", 1);
+          <button class="play-btn" id="btn-play" type="button"></button>
 
-      node.append("title")
-        .text(d => `node ${d.id} (severity: ${d.severity})`);
+          <button class="icon-btn" id="btn-next" type="button" aria-label="Next event">
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+              <path d="M5 2.5 9.5 7 5 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
 
-      const label = svg.append("g")
-        .selectAll("text")
-        .data(graph.nodes)
-        .join("text")
-        .text(d => d.id)
-        .attr("font-size", 10)
-        .attr("font-family", "sans-serif")
-        .attr("text-anchor", "middle")
-        .attr("fill", "#1d1d1d")
-        .attr("pointer-events", "none");
+          <div class="track" id="track"></div>
+        </div>
+      </div>
 
-      simulation.on("tick", () => {
-        link
-          .attr("x1", d => d.source.x)
-          .attr("y1", d => d.source.y)
-          .attr("x2", d => d.target.x)
-          .attr("y2", d => d.target.y);
+    </section>
 
-        node
-          .attr("cx", d => d.x)
-          .attr("cy", d => d.y);
+    <!-- RIGHT COLUMN: analysis cards -->
+    <aside class="panel side">
 
-        label
-          .attr("x", d => d.x)
-          .attr("y", d => d.y + radiusFor(d) + 12);
-      });
-    });
-  </script>
+      <section class="side-section" id="ranking-section">
+        <span class="eyebrow">Ranking</span>
+        <p class="ranking-note">
+          If one of these nodes fails, the network splits. The number is how many
+          nodes get cut off from the main part.
+        </p>
+        <ol class="ranking-list" id="ranking-list"></ol>
+        <p class="ranking-empty" id="ranking-empty" hidden>
+          No single points of failure. Every node can fail without splitting the network.
+        </p>
+      </section>
+
+      <section class="side-section" id="selected-section">
+        <span class="eyebrow">Selected node</span>
+        <div id="selected-body" aria-live="polite"></div>
+      </section>
+
+      <section class="side-section">
+        <span class="eyebrow">Simulation</span>
+        <p class="placeholder">Targeted vs random failure will appear here.</p>
+      </section>
+
+    </aside>
+
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
