@@ -1,0 +1,32 @@
+{
+  "budget": 10,
+  "nodes": [
+    { "id": "SEA", "label": "Seattle",      "role": "router", "criticality": 3 },
+    { "id": "SNV", "label": "Sunnyvale",    "role": "router", "criticality": 3 },
+    { "id": "LAX", "label": "Los Angeles",  "role": "router", "criticality": 3 },
+    { "id": "DEN", "label": "Denver",       "role": "router", "criticality": 3 },
+    { "id": "KSC", "label": "Kansas City",  "role": "router", "criticality": 3 },
+    { "id": "HOU", "label": "Houston",      "role": "router", "criticality": 3 },
+    { "id": "IND", "label": "Indianapolis", "role": "router", "criticality": 3 },
+    { "id": "ATL", "label": "Atlanta",      "role": "router", "criticality": 3 },
+    { "id": "CHI", "label": "Chicago",      "role": "router", "criticality": 3 },
+    { "id": "NYC", "label": "New York",     "role": "router", "criticality": 3 },
+    { "id": "WDC", "label": "Washington",   "role": "router", "criticality": 3 }
+  ],
+  "edges": [
+    { "source": "SEA", "target": "SNV" },
+    { "source": "SEA", "target": "DEN" },
+    { "source": "SNV", "target": "LAX" },
+    { "source": "SNV", "target": "DEN" },
+    { "source": "LAX", "target": "HOU" },
+    { "source": "DEN", "target": "KSC" },
+    { "source": "KSC", "target": "HOU" },
+    { "source": "KSC", "target": "IND" },
+    { "source": "HOU", "target": "ATL" },
+    { "source": "IND", "target": "CHI" },
+    { "source": "IND", "target": "ATL" },
+    { "source": "CHI", "target": "NYC" },
+    { "source": "ATL", "target": "WDC" },
+    { "source": "NYC", "target": "WDC" }
+  ]
+}
