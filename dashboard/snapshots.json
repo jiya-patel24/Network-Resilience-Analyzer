@@ -1,220 +1,7536 @@
 [
   {
-    "event": "Initial network",
+    "event": "Initial network scan",
+    "kind": "baseline",
+    "method": "Tarjan (iterative)",
+    "compute_ms": 0.038,
     "state": {
       "nodes": [
         {
           "id": 1,
+          "label": "Internet Gateway",
+          "role": "gateway",
+          "zone": "internet",
+          "criticality": 5,
           "is_critical": false,
-          "severity": 0
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
         },
         {
           "id": 2,
-          "is_critical": false,
-          "severity": 0
+          "label": "Edge Firewall",
+          "role": "firewall",
+          "zone": "dmz",
+          "criticality": 7,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 18,
+          "factors": {
+            "I": 0.12,
+            "B": 0.0,
+            "C": 0.27,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 3
         },
         {
           "id": 3,
-          "is_critical": true,
-          "severity": 2
+          "label": "Core Router A",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.11,
+            "T": 0.0,
+            "R": 0.0
+          },
+          "degree": 3
         },
         {
           "id": 4,
+          "label": "Core Router B",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
           "is_critical": true,
-          "severity": 1
+          "severity": 5,
+          "composite": 66,
+          "factors": {
+            "I": 1.0,
+            "B": 0.25,
+            "C": 1.0,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
         },
         {
           "id": 5,
-          "is_critical": false,
-          "severity": 0
-        }
-      ],
-      "edges": [
-        {
-          "source": 1,
-          "target": 2
-        },
-        {
-          "source": 1,
-          "target": 3
-        },
-        {
-          "source": 2,
-          "target": 3
-        },
-        {
-          "source": 3,
-          "target": 4
-        },
-        {
-          "source": 4,
-          "target": 5
-        }
-      ]
-    }
-  },
-  {
-    "event": "Node 6 joined the network (attached to node 5)",
-    "state": {
-      "nodes": [
-        {
-          "id": 1,
-          "is_critical": false,
-          "severity": 0
-        },
-        {
-          "id": 2,
-          "is_critical": false,
-          "severity": 0
-        },
-        {
-          "id": 3,
+          "label": "Engineering Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 6,
           "is_critical": true,
-          "severity": 2
-        },
-        {
-          "id": 4,
-          "is_critical": true,
-          "severity": 2
-        },
-        {
-          "id": 5,
-          "is_critical": true,
-          "severity": 1
+          "severity": 4,
+          "composite": 45,
+          "factors": {
+            "I": 0.49,
+            "B": 0.2,
+            "C": 0.89,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 5
         },
         {
           "id": 6,
-          "is_critical": false,
-          "severity": 0
-        }
-      ],
-      "edges": [
-        {
-          "source": 1,
-          "target": 2
-        },
-        {
-          "source": 1,
-          "target": 3
-        },
-        {
-          "source": 2,
-          "target": 3
-        },
-        {
-          "source": 3,
-          "target": 4
-        },
-        {
-          "source": 4,
-          "target": 5
-        },
-        {
-          "source": 5,
-          "target": 6
-        }
-      ]
-    }
-  },
-  {
-    "event": "Node 3 failed and was removed",
-    "state": {
-      "nodes": [
-        {
-          "id": 1,
-          "is_critical": false,
-          "severity": 0
-        },
-        {
-          "id": 2,
-          "is_critical": false,
-          "severity": 0
-        },
-        {
-          "id": 4,
-          "is_critical": false,
-          "severity": 0
-        },
-        {
-          "id": 5,
+          "label": "Datacenter Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 8,
           "is_critical": true,
-          "severity": 2
-        },
-        {
-          "id": 6,
-          "is_critical": false,
-          "severity": 0
-        }
-      ],
-      "edges": [
-        {
-          "source": 1,
-          "target": 2
-        },
-        {
-          "source": 4,
-          "target": 5
-        },
-        {
-          "source": 5,
-          "target": 6
-        }
-      ]
-    }
-  },
-  {
-    "event": "Node 7 joined the network (attached to node 1)",
-    "state": {
-      "nodes": [
-        {
-          "id": 1,
-          "is_critical": true,
-          "severity": 2
-        },
-        {
-          "id": 2,
-          "is_critical": false,
-          "severity": 0
-        },
-        {
-          "id": 4,
-          "is_critical": false,
-          "severity": 0
-        },
-        {
-          "id": 5,
-          "is_critical": true,
-          "severity": 2
-        },
-        {
-          "id": 6,
-          "is_critical": false,
-          "severity": 0
+          "severity": 4,
+          "composite": 64,
+          "factors": {
+            "I": 0.8,
+            "B": 0.5,
+            "C": 0.89,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
         },
         {
           "id": 7,
+          "label": "Web Server",
+          "role": "server",
+          "zone": "dmz",
+          "criticality": 8,
           "is_critical": false,
-          "severity": 0
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 8,
+          "label": "App Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 9,
+          "label": "DB Primary",
+          "role": "database",
+          "zone": "data",
+          "criticality": 10,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 10,
+          "label": "DB Replica",
+          "role": "database",
+          "zone": "data",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 11,
+          "label": "Wi-Fi Controller",
+          "role": "wifi",
+          "zone": "internal",
+          "criticality": 3,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 28,
+          "factors": {
+            "I": 0.05,
+            "B": 0.5,
+            "C": 0.27,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 12,
+          "label": "Office Workstations",
+          "role": "client",
+          "zone": "internal",
+          "criticality": 2,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 13,
+          "label": "Auth Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 32,
+          "factors": {
+            "I": 0.17,
+            "B": 0.5,
+            "C": 0.27,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 14,
+          "label": "Backup Vault",
+          "role": "storage",
+          "zone": "data",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
         }
       ],
       "edges": [
         {
           "source": 1,
-          "target": 2
+          "target": 2,
+          "is_bridge": true,
+          "is_violation": false
         },
         {
-          "source": 1,
-          "target": 7
+          "source": 2,
+          "target": 3,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 5,
+          "is_bridge": false,
+          "is_violation": false
         },
         {
           "source": 4,
-          "target": 5
+          "target": 5,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 4,
+          "target": 6,
+          "is_bridge": true,
+          "is_violation": false
         },
         {
           "source": 5,
-          "target": 6
+          "target": 7,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 5,
+          "target": 8,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 5,
+          "target": 11,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 6,
+          "target": 9,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 13,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 7,
+          "target": 8,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 9,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 11,
+          "target": 12,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 13,
+          "target": 14,
+          "is_bridge": true,
+          "is_violation": true
+        }
+      ],
+      "top_threats": [
+        {
+          "id": 4,
+          "score": 66
+        },
+        {
+          "id": 6,
+          "score": 64
+        },
+        {
+          "id": 5,
+          "score": 45
+        }
+      ],
+      "metrics": {
+        "nodes": 14,
+        "links": 17,
+        "spofs": 6,
+        "bridges": 6,
+        "components": 1,
+        "resilience": 61,
+        "security": 30,
+        "violations": 5
+      },
+      "security": {
+        "configured": true,
+        "score": 30,
+        "violations": [
+          {
+            "source": 5,
+            "target": 7,
+            "reason": "Direct internal <-> dmz link with no firewall in between"
+          },
+          {
+            "source": 6,
+            "target": 9,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 6,
+            "target": 10,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 7,
+            "target": 8,
+            "reason": "Direct dmz <-> internal link with no firewall in between"
+          },
+          {
+            "source": 13,
+            "target": 14,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          }
+        ],
+        "attack_paths": [
+          {
+            "entry": 1,
+            "target": 9,
+            "path": [
+              1,
+              2,
+              4,
+              6,
+              9
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 10,
+            "path": [
+              1,
+              2,
+              4,
+              6,
+              10
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 14,
+            "path": [
+              1,
+              2,
+              4,
+              6,
+              13,
+              14
+            ],
+            "hops": 5,
+            "firewalls": 1
+          }
+        ],
+        "jewels": [
+          9,
+          10,
+          14
+        ],
+        "entries": [
+          1
+        ],
+        "required_depth": 2
+      },
+      "suggestions": [
+        {
+          "from": 1,
+          "to": 14,
+          "fixes": 4,
+          "resolves": true,
+          "severity_before": 5,
+          "severity_after": 0,
+          "spofs_before": 6,
+          "spofs_after": 3
+        },
+        {
+          "from": 1,
+          "to": 12,
+          "fixes": 11,
+          "resolves": true,
+          "severity_before": 1,
+          "severity_after": 0,
+          "spofs_before": 6,
+          "spofs_after": 4
+        },
+        {
+          "from": 1,
+          "to": 10,
+          "fixes": 6,
+          "resolves": false,
+          "severity_before": 4,
+          "severity_after": 2,
+          "spofs_before": 6,
+          "spofs_after": 4
         }
       ]
+    },
+    "delta": null,
+    "redesign": {
+      "budget": 15,
+      "spent": 12,
+      "before": {
+        "resilience": 61,
+        "security": 30,
+        "overall": 46,
+        "spofs": 6,
+        "violations": 5,
+        "bridges": 6
+      },
+      "after": {
+        "resilience": 95,
+        "security": 100,
+        "overall": 98,
+        "spofs": 1,
+        "violations": 0,
+        "bridges": 1
+      },
+      "plan": [
+        {
+          "step": 1,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Web Server and Engineering Switch, App Server (enforces the internal boundary)",
+          "cost": 3,
+          "overall_after": 56,
+          "resilience_after": 65,
+          "security_after": 47
+        },
+        {
+          "step": 2,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Datacenter Switch and DB Primary, DB Replica (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 76,
+          "resilience_after": 68,
+          "security_after": 84
+        },
+        {
+          "step": 3,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Auth Server and Backup Vault (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 85,
+          "resilience_after": 69,
+          "security_after": 100
+        },
+        {
+          "step": 4,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Office Workstations <-> Segment Auth Server FW-A (removes the single point of failure at Core Router B)",
+          "cost": 1,
+          "overall_after": 94,
+          "resilience_after": 87,
+          "security_after": 100
+        },
+        {
+          "step": 5,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Wi-Fi Controller <-> Segment Web Server FW-A (removes the single point of failure at Engineering Switch)",
+          "cost": 1,
+          "overall_after": 95,
+          "resilience_after": 89,
+          "security_after": 100
+        },
+        {
+          "step": 6,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Office Workstations <-> Segment Datacenter Switch FW-A (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 98,
+          "resilience_after": 95,
+          "security_after": 100
+        }
+      ],
+      "state_after": {
+        "nodes": [
+          {
+            "id": 1,
+            "label": "Internet Gateway",
+            "role": "gateway",
+            "zone": "internet",
+            "criticality": 5,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 2,
+            "label": "Edge Firewall",
+            "role": "firewall",
+            "zone": "dmz",
+            "criticality": 7,
+            "is_critical": true,
+            "severity": 1,
+            "composite": 49,
+            "factors": {
+              "I": 1.0,
+              "B": 0.0,
+              "C": 0.29,
+              "T": 0.0,
+              "R": 1.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 3,
+            "label": "Core Router A",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.11,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 4,
+            "label": "Core Router B",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 14,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.93,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 5,
+            "label": "Engineering Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 6,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 12,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.81,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 6
+          },
+          {
+            "id": 6,
+            "label": "Datacenter Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 15,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 1.0,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 7,
+            "label": "Web Server",
+            "role": "server",
+            "zone": "dmz",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 8,
+            "label": "App Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 9,
+            "label": "DB Primary",
+            "role": "database",
+            "zone": "data",
+            "criticality": 10,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 10,
+            "label": "DB Replica",
+            "role": "database",
+            "zone": "data",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 11,
+            "label": "Wi-Fi Controller",
+            "role": "wifi",
+            "zone": "internal",
+            "criticality": 3,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 7,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.5,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 12,
+            "label": "Office Workstations",
+            "role": "client",
+            "zone": "internal",
+            "criticality": 2,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 9,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.6,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 13,
+            "label": "Auth Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.42,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 14,
+            "label": "Backup Vault",
+            "role": "storage",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.03,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 15,
+            "label": "Segment Web Server FW-A",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 4,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.25,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 16,
+            "label": "Segment Web Server FW-B",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 1,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.07,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 17,
+            "label": "Segment Datacenter Switch FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 7,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.45,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 18,
+            "label": "Segment Datacenter Switch FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.14,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 19,
+            "label": "Segment Auth Server FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.32,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 20,
+            "label": "Segment Auth Server FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.05,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          }
+        ],
+        "edges": [
+          {
+            "source": 1,
+            "target": 2,
+            "is_bridge": true,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 3,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 5,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 4,
+            "target": 5,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 4,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 8,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 11,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 15,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 13,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 15,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 15,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 10,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 11,
+            "target": 12,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 11,
+            "target": 15,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 12,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 12,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          }
+        ],
+        "top_threats": [
+          {
+            "id": 2,
+            "score": 49
+          },
+          {
+            "id": 6,
+            "score": 15
+          },
+          {
+            "id": 4,
+            "score": 14
+          }
+        ],
+        "metrics": {
+          "nodes": 20,
+          "links": 31,
+          "spofs": 1,
+          "bridges": 1,
+          "components": 1,
+          "resilience": 95,
+          "security": 100,
+          "violations": 0
+        },
+        "security": {
+          "configured": true,
+          "score": 100,
+          "violations": [],
+          "attack_paths": [
+            {
+              "entry": 1,
+              "target": 9,
+              "path": [
+                1,
+                2,
+                4,
+                6,
+                17,
+                9
+              ],
+              "hops": 5,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 10,
+              "path": [
+                1,
+                2,
+                4,
+                6,
+                17,
+                10
+              ],
+              "hops": 5,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 14,
+              "path": [
+                1,
+                2,
+                4,
+                6,
+                13,
+                19,
+                14
+              ],
+              "hops": 6,
+              "firewalls": 2
+            }
+          ],
+          "jewels": [
+            9,
+            10,
+            14
+          ],
+          "entries": [
+            1
+          ],
+          "required_depth": 2
+        },
+        "suggestions": [
+          {
+            "from": 14,
+            "to": 1,
+            "fixes": 2,
+            "resolves": true,
+            "severity_before": 1,
+            "severity_after": 0,
+            "spofs_before": 1,
+            "spofs_after": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "event": "Monitoring Hub joined the network (attached to Edge Firewall)",
+    "kind": "add_node",
+    "method": "Incremental update",
+    "compute_ms": 0.055,
+    "state": {
+      "nodes": [
+        {
+          "id": 1,
+          "label": "Internet Gateway",
+          "role": "gateway",
+          "zone": "internet",
+          "criticality": 5,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 2,
+          "label": "Edge Firewall",
+          "role": "firewall",
+          "zone": "dmz",
+          "criticality": 7,
+          "is_critical": true,
+          "severity": 2,
+          "composite": 25,
+          "factors": {
+            "I": 0.22,
+            "B": 0.0,
+            "C": 0.48,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 3,
+          "label": "Core Router A",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.14,
+            "T": 0.0,
+            "R": 0.0
+          },
+          "degree": 3
+        },
+        {
+          "id": 4,
+          "label": "Core Router B",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 5,
+          "composite": 66,
+          "factors": {
+            "I": 1.0,
+            "B": 0.25,
+            "C": 1.0,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 5,
+          "label": "Engineering Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 6,
+          "is_critical": true,
+          "severity": 4,
+          "composite": 45,
+          "factors": {
+            "I": 0.49,
+            "B": 0.2,
+            "C": 0.84,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 5
+        },
+        {
+          "id": 6,
+          "label": "Datacenter Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 4,
+          "composite": 63,
+          "factors": {
+            "I": 0.8,
+            "B": 0.5,
+            "C": 0.84,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 7,
+          "label": "Web Server",
+          "role": "server",
+          "zone": "dmz",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 8,
+          "label": "App Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 9,
+          "label": "DB Primary",
+          "role": "database",
+          "zone": "data",
+          "criticality": 10,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 10,
+          "label": "DB Replica",
+          "role": "database",
+          "zone": "data",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 11,
+          "label": "Wi-Fi Controller",
+          "role": "wifi",
+          "zone": "internal",
+          "criticality": 3,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 28,
+          "factors": {
+            "I": 0.05,
+            "B": 0.5,
+            "C": 0.25,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 12,
+          "label": "Office Workstations",
+          "role": "client",
+          "zone": "internal",
+          "criticality": 2,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 13,
+          "label": "Auth Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 32,
+          "factors": {
+            "I": 0.17,
+            "B": 0.5,
+            "C": 0.25,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 14,
+          "label": "Backup Vault",
+          "role": "storage",
+          "zone": "data",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 15,
+          "label": "Monitoring Hub",
+          "role": "monitor",
+          "zone": "internal",
+          "criticality": 4,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        }
+      ],
+      "edges": [
+        {
+          "source": 1,
+          "target": 2,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 3,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 15,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 5,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 4,
+          "target": 5,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 4,
+          "target": 6,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 5,
+          "target": 7,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 5,
+          "target": 8,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 5,
+          "target": 11,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 6,
+          "target": 9,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 13,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 7,
+          "target": 8,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 9,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 11,
+          "target": 12,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 13,
+          "target": 14,
+          "is_bridge": true,
+          "is_violation": true
+        }
+      ],
+      "top_threats": [
+        {
+          "id": 4,
+          "score": 66
+        },
+        {
+          "id": 6,
+          "score": 63
+        },
+        {
+          "id": 5,
+          "score": 45
+        }
+      ],
+      "metrics": {
+        "nodes": 15,
+        "links": 18,
+        "spofs": 6,
+        "bridges": 7,
+        "components": 1,
+        "resilience": 62,
+        "security": 30,
+        "violations": 5
+      },
+      "security": {
+        "configured": true,
+        "score": 30,
+        "violations": [
+          {
+            "source": 5,
+            "target": 7,
+            "reason": "Direct internal <-> dmz link with no firewall in between"
+          },
+          {
+            "source": 6,
+            "target": 9,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 6,
+            "target": 10,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 7,
+            "target": 8,
+            "reason": "Direct dmz <-> internal link with no firewall in between"
+          },
+          {
+            "source": 13,
+            "target": 14,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          }
+        ],
+        "attack_paths": [
+          {
+            "entry": 1,
+            "target": 9,
+            "path": [
+              1,
+              2,
+              4,
+              6,
+              9
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 10,
+            "path": [
+              1,
+              2,
+              4,
+              6,
+              10
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 14,
+            "path": [
+              1,
+              2,
+              4,
+              6,
+              13,
+              14
+            ],
+            "hops": 5,
+            "firewalls": 1
+          }
+        ],
+        "jewels": [
+          9,
+          10,
+          14
+        ],
+        "entries": [
+          1
+        ],
+        "required_depth": 2
+      },
+      "suggestions": [
+        {
+          "from": 1,
+          "to": 14,
+          "fixes": 4,
+          "resolves": true,
+          "severity_before": 5,
+          "severity_after": 0,
+          "spofs_before": 6,
+          "spofs_after": 4
+        },
+        {
+          "from": 1,
+          "to": 10,
+          "fixes": 6,
+          "resolves": false,
+          "severity_before": 4,
+          "severity_after": 2,
+          "spofs_before": 6,
+          "spofs_after": 5
+        },
+        {
+          "from": 12,
+          "to": 1,
+          "fixes": 2,
+          "resolves": false,
+          "severity_before": 2,
+          "severity_after": 1,
+          "spofs_before": 6,
+          "spofs_after": 5
+        }
+      ]
+    },
+    "delta": {
+      "added_nodes": [
+        15
+      ],
+      "removed_nodes": [],
+      "added_edges": [
+        [
+          2,
+          15
+        ]
+      ],
+      "removed_edges": [],
+      "updated_nodes": [
+        {
+          "id": 2,
+          "severity": 2,
+          "is_critical": true
+        }
+      ],
+      "resilience_change": 1,
+      "spof_change": 0
+    },
+    "redesign": {
+      "budget": 15,
+      "spent": 12,
+      "before": {
+        "resilience": 62,
+        "security": 30,
+        "overall": 46,
+        "spofs": 6,
+        "violations": 5,
+        "bridges": 7
+      },
+      "after": {
+        "resilience": 96,
+        "security": 100,
+        "overall": 98,
+        "spofs": 1,
+        "violations": 0,
+        "bridges": 1
+      },
+      "plan": [
+        {
+          "step": 1,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Web Server and Engineering Switch, App Server (enforces the internal boundary)",
+          "cost": 3,
+          "overall_after": 57,
+          "resilience_after": 66,
+          "security_after": 48
+        },
+        {
+          "step": 2,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Datacenter Switch and DB Primary, DB Replica (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 76,
+          "resilience_after": 68,
+          "security_after": 84
+        },
+        {
+          "step": 3,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Auth Server and Backup Vault (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 85,
+          "resilience_after": 70,
+          "security_after": 100
+        },
+        {
+          "step": 4,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Office Workstations <-> Segment Auth Server FW-A (removes the single point of failure at Core Router B)",
+          "cost": 1,
+          "overall_after": 93,
+          "resilience_after": 86,
+          "security_after": 100
+        },
+        {
+          "step": 5,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Monitoring Hub <-> Segment Web Server FW-A (removes the single point of failure at Engineering Switch)",
+          "cost": 1,
+          "overall_after": 95,
+          "resilience_after": 90,
+          "security_after": 100
+        },
+        {
+          "step": 6,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Wi-Fi Controller <-> Segment Datacenter Switch FW-A (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 98,
+          "resilience_after": 96,
+          "security_after": 100
+        }
+      ],
+      "state_after": {
+        "nodes": [
+          {
+            "id": 1,
+            "label": "Internet Gateway",
+            "role": "gateway",
+            "zone": "internet",
+            "criticality": 5,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 2,
+            "label": "Edge Firewall",
+            "role": "firewall",
+            "zone": "dmz",
+            "criticality": 7,
+            "is_critical": true,
+            "severity": 1,
+            "composite": 51,
+            "factors": {
+              "I": 1.0,
+              "B": 0.0,
+              "C": 0.4,
+              "T": 0.0,
+              "R": 1.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 3,
+            "label": "Core Router A",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 1,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.07,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 4,
+            "label": "Core Router B",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 12,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.81,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 5,
+            "label": "Engineering Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 6,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 15,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 1.0,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 6
+          },
+          {
+            "id": 6,
+            "label": "Datacenter Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 14,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.96,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 7,
+            "label": "Web Server",
+            "role": "server",
+            "zone": "dmz",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 8,
+            "label": "App Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 9,
+            "label": "DB Primary",
+            "role": "database",
+            "zone": "data",
+            "criticality": 10,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 10,
+            "label": "DB Replica",
+            "role": "database",
+            "zone": "data",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 11,
+            "label": "Wi-Fi Controller",
+            "role": "wifi",
+            "zone": "internal",
+            "criticality": 3,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 10,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.65,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 12,
+            "label": "Office Workstations",
+            "role": "client",
+            "zone": "internal",
+            "criticality": 2,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.24,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 13,
+            "label": "Auth Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 7,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.48,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 14,
+            "label": "Backup Vault",
+            "role": "storage",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.02,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 15,
+            "label": "Monitoring Hub",
+            "role": "monitor",
+            "zone": "internal",
+            "criticality": 4,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.07,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 16,
+            "label": "Segment Web Server FW-A",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 4,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.26,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 17,
+            "label": "Segment Web Server FW-B",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.11,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 18,
+            "label": "Segment Datacenter Switch FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.42,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 19,
+            "label": "Segment Datacenter Switch FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.13,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 20,
+            "label": "Segment Auth Server FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 4,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.24,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 21,
+            "label": "Segment Auth Server FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.07,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          }
+        ],
+        "edges": [
+          {
+            "source": 1,
+            "target": 2,
+            "is_bridge": true,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 3,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 15,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 5,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 4,
+            "target": 5,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 4,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 8,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 11,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 13,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 10,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 11,
+            "target": 12,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 11,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 12,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 15,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          }
+        ],
+        "top_threats": [
+          {
+            "id": 2,
+            "score": 51
+          },
+          {
+            "id": 5,
+            "score": 15
+          },
+          {
+            "id": 6,
+            "score": 14
+          }
+        ],
+        "metrics": {
+          "nodes": 21,
+          "links": 32,
+          "spofs": 1,
+          "bridges": 1,
+          "components": 1,
+          "resilience": 96,
+          "security": 100,
+          "violations": 0
+        },
+        "security": {
+          "configured": true,
+          "score": 100,
+          "violations": [],
+          "attack_paths": [
+            {
+              "entry": 1,
+              "target": 9,
+              "path": [
+                1,
+                2,
+                4,
+                6,
+                18,
+                9
+              ],
+              "hops": 5,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 10,
+              "path": [
+                1,
+                2,
+                4,
+                6,
+                18,
+                10
+              ],
+              "hops": 5,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 14,
+              "path": [
+                1,
+                2,
+                4,
+                6,
+                13,
+                20,
+                14
+              ],
+              "hops": 6,
+              "firewalls": 2
+            }
+          ],
+          "jewels": [
+            9,
+            10,
+            14
+          ],
+          "entries": [
+            1
+          ],
+          "required_depth": 2
+        },
+        "suggestions": [
+          {
+            "from": 12,
+            "to": 1,
+            "fixes": 2,
+            "resolves": true,
+            "severity_before": 1,
+            "severity_after": 0,
+            "spofs_before": 1,
+            "spofs_after": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "event": "New redundant link: Core Router A \u2194 Datacenter Switch",
+    "kind": "add_link",
+    "method": "Full recompute",
+    "compute_ms": 0.025,
+    "state": {
+      "nodes": [
+        {
+          "id": 1,
+          "label": "Internet Gateway",
+          "role": "gateway",
+          "zone": "internet",
+          "criticality": 5,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 2,
+          "label": "Edge Firewall",
+          "role": "firewall",
+          "zone": "dmz",
+          "criticality": 7,
+          "is_critical": true,
+          "severity": 2,
+          "composite": 28,
+          "factors": {
+            "I": 0.27,
+            "B": 0.0,
+            "C": 0.57,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 3,
+          "label": "Core Router A",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 9,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.62,
+            "T": 0.0,
+            "R": 0.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 4,
+          "label": "Core Router B",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 9,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.62,
+            "T": 0.0,
+            "R": 0.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 5,
+          "label": "Engineering Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 6,
+          "is_critical": true,
+          "severity": 4,
+          "composite": 51,
+          "factors": {
+            "I": 0.61,
+            "B": 0.2,
+            "C": 1.0,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 5
+        },
+        {
+          "id": 6,
+          "label": "Datacenter Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 4,
+          "composite": 65,
+          "factors": {
+            "I": 1.0,
+            "B": 0.2,
+            "C": 1.0,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 5
+        },
+        {
+          "id": 7,
+          "label": "Web Server",
+          "role": "server",
+          "zone": "dmz",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 8,
+          "label": "App Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 9,
+          "label": "DB Primary",
+          "role": "database",
+          "zone": "data",
+          "criticality": 10,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 10,
+          "label": "DB Replica",
+          "role": "database",
+          "zone": "data",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 11,
+          "label": "Wi-Fi Controller",
+          "role": "wifi",
+          "zone": "internal",
+          "criticality": 3,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 29,
+          "factors": {
+            "I": 0.06,
+            "B": 0.5,
+            "C": 0.3,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 12,
+          "label": "Office Workstations",
+          "role": "client",
+          "zone": "internal",
+          "criticality": 2,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 13,
+          "label": "Auth Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 34,
+          "factors": {
+            "I": 0.21,
+            "B": 0.5,
+            "C": 0.3,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 14,
+          "label": "Backup Vault",
+          "role": "storage",
+          "zone": "data",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 15,
+          "label": "Monitoring Hub",
+          "role": "monitor",
+          "zone": "internal",
+          "criticality": 4,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        }
+      ],
+      "edges": [
+        {
+          "source": 1,
+          "target": 2,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 3,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 15,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 5,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 6,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 4,
+          "target": 5,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 4,
+          "target": 6,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 5,
+          "target": 7,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 5,
+          "target": 8,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 5,
+          "target": 11,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 6,
+          "target": 9,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 13,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 7,
+          "target": 8,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 9,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 11,
+          "target": 12,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 13,
+          "target": 14,
+          "is_bridge": true,
+          "is_violation": true
+        }
+      ],
+      "top_threats": [
+        {
+          "id": 6,
+          "score": 65
+        },
+        {
+          "id": 5,
+          "score": 51
+        },
+        {
+          "id": 13,
+          "score": 34
+        }
+      ],
+      "metrics": {
+        "nodes": 15,
+        "links": 19,
+        "spofs": 5,
+        "bridges": 6,
+        "components": 1,
+        "resilience": 69,
+        "security": 30,
+        "violations": 5
+      },
+      "security": {
+        "configured": true,
+        "score": 30,
+        "violations": [
+          {
+            "source": 5,
+            "target": 7,
+            "reason": "Direct internal <-> dmz link with no firewall in between"
+          },
+          {
+            "source": 6,
+            "target": 9,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 6,
+            "target": 10,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 7,
+            "target": 8,
+            "reason": "Direct dmz <-> internal link with no firewall in between"
+          },
+          {
+            "source": 13,
+            "target": 14,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          }
+        ],
+        "attack_paths": [
+          {
+            "entry": 1,
+            "target": 9,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              9
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 10,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              10
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 14,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              13,
+              14
+            ],
+            "hops": 5,
+            "firewalls": 1
+          }
+        ],
+        "jewels": [
+          9,
+          10,
+          14
+        ],
+        "entries": [
+          1
+        ],
+        "required_depth": 2
+      },
+      "suggestions": [
+        {
+          "from": 1,
+          "to": 14,
+          "fixes": 13,
+          "resolves": true,
+          "severity_before": 1,
+          "severity_after": 0,
+          "spofs_before": 5,
+          "spofs_after": 4
+        },
+        {
+          "from": 12,
+          "to": 1,
+          "fixes": 2,
+          "resolves": false,
+          "severity_before": 2,
+          "severity_after": 1,
+          "spofs_before": 5,
+          "spofs_after": 4
+        },
+        {
+          "from": 1,
+          "to": 7,
+          "fixes": 5,
+          "resolves": false,
+          "severity_before": 4,
+          "severity_after": 2,
+          "spofs_before": 5,
+          "spofs_after": 5
+        }
+      ]
+    },
+    "delta": {
+      "added_nodes": [],
+      "removed_nodes": [],
+      "added_edges": [
+        [
+          3,
+          6
+        ]
+      ],
+      "removed_edges": [],
+      "updated_nodes": [
+        {
+          "id": 4,
+          "severity": 0,
+          "is_critical": false
+        }
+      ],
+      "resilience_change": 7,
+      "spof_change": -1
+    },
+    "redesign": {
+      "budget": 15,
+      "spent": 12,
+      "before": {
+        "resilience": 69,
+        "security": 30,
+        "overall": 50,
+        "spofs": 5,
+        "violations": 5,
+        "bridges": 6
+      },
+      "after": {
+        "resilience": 96,
+        "security": 100,
+        "overall": 98,
+        "spofs": 1,
+        "violations": 0,
+        "bridges": 1
+      },
+      "plan": [
+        {
+          "step": 1,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Web Server and Engineering Switch, App Server (enforces the internal boundary)",
+          "cost": 3,
+          "overall_after": 60,
+          "resilience_after": 70,
+          "security_after": 49
+        },
+        {
+          "step": 2,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Datacenter Switch and DB Primary, DB Replica (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 79,
+          "resilience_after": 73,
+          "security_after": 84
+        },
+        {
+          "step": 3,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Auth Server and Backup Vault (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 87,
+          "resilience_after": 74,
+          "security_after": 100
+        },
+        {
+          "step": 4,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Office Workstations <-> Segment Auth Server FW-A (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 93,
+          "resilience_after": 86,
+          "security_after": 100
+        },
+        {
+          "step": 5,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Monitoring Hub <-> Segment Web Server FW-A (removes the single point of failure at Engineering Switch)",
+          "cost": 1,
+          "overall_after": 95,
+          "resilience_after": 90,
+          "security_after": 100
+        },
+        {
+          "step": 6,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Wi-Fi Controller <-> Segment Datacenter Switch FW-A (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 98,
+          "resilience_after": 96,
+          "security_after": 100
+        }
+      ],
+      "state_after": {
+        "nodes": [
+          {
+            "id": 1,
+            "label": "Internet Gateway",
+            "role": "gateway",
+            "zone": "internet",
+            "criticality": 5,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 2,
+            "label": "Edge Firewall",
+            "role": "firewall",
+            "zone": "dmz",
+            "criticality": 7,
+            "is_critical": true,
+            "severity": 1,
+            "composite": 51,
+            "factors": {
+              "I": 1.0,
+              "B": 0.0,
+              "C": 0.41,
+              "T": 0.0,
+              "R": 1.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 3,
+            "label": "Core Router A",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.39,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 4,
+            "label": "Core Router B",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.39,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 5,
+            "label": "Engineering Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 6,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 14,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.96,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 6
+          },
+          {
+            "id": 6,
+            "label": "Datacenter Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 15,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 1.0,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 5
+          },
+          {
+            "id": 7,
+            "label": "Web Server",
+            "role": "server",
+            "zone": "dmz",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 8,
+            "label": "App Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 9,
+            "label": "DB Primary",
+            "role": "database",
+            "zone": "data",
+            "criticality": 10,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 10,
+            "label": "DB Replica",
+            "role": "database",
+            "zone": "data",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 11,
+            "label": "Wi-Fi Controller",
+            "role": "wifi",
+            "zone": "internal",
+            "criticality": 3,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 9,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.61,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 12,
+            "label": "Office Workstations",
+            "role": "client",
+            "zone": "internal",
+            "criticality": 2,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.22,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 13,
+            "label": "Auth Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 8,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.5,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 14,
+            "label": "Backup Vault",
+            "role": "storage",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.02,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 15,
+            "label": "Monitoring Hub",
+            "role": "monitor",
+            "zone": "internal",
+            "criticality": 4,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.07,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 16,
+            "label": "Segment Web Server FW-A",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 4,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.25,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 17,
+            "label": "Segment Web Server FW-B",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.11,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 18,
+            "label": "Segment Datacenter Switch FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.41,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 19,
+            "label": "Segment Datacenter Switch FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.13,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 20,
+            "label": "Segment Auth Server FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 4,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.24,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 21,
+            "label": "Segment Auth Server FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.07,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          }
+        ],
+        "edges": [
+          {
+            "source": 1,
+            "target": 2,
+            "is_bridge": true,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 3,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 15,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 5,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 4,
+            "target": 5,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 4,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 8,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 11,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 5,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 13,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 10,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 11,
+            "target": 12,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 11,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 12,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 15,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          }
+        ],
+        "top_threats": [
+          {
+            "id": 2,
+            "score": 51
+          },
+          {
+            "id": 6,
+            "score": 15
+          },
+          {
+            "id": 5,
+            "score": 14
+          }
+        ],
+        "metrics": {
+          "nodes": 21,
+          "links": 33,
+          "spofs": 1,
+          "bridges": 1,
+          "components": 1,
+          "resilience": 96,
+          "security": 100,
+          "violations": 0
+        },
+        "security": {
+          "configured": true,
+          "score": 100,
+          "violations": [],
+          "attack_paths": [
+            {
+              "entry": 1,
+              "target": 9,
+              "path": [
+                1,
+                2,
+                3,
+                6,
+                18,
+                9
+              ],
+              "hops": 5,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 10,
+              "path": [
+                1,
+                2,
+                3,
+                6,
+                18,
+                10
+              ],
+              "hops": 5,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 14,
+              "path": [
+                1,
+                2,
+                3,
+                6,
+                13,
+                20,
+                14
+              ],
+              "hops": 6,
+              "firewalls": 2
+            }
+          ],
+          "jewels": [
+            9,
+            10,
+            14
+          ],
+          "entries": [
+            1
+          ],
+          "required_depth": 2
+        },
+        "suggestions": [
+          {
+            "from": 12,
+            "to": 1,
+            "fixes": 2,
+            "resolves": true,
+            "severity_before": 1,
+            "severity_after": 0,
+            "spofs_before": 1,
+            "spofs_after": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "event": "Engineering Switch failed and was removed",
+    "kind": "failure",
+    "method": "Full recompute",
+    "compute_ms": 0.036,
+    "state": {
+      "nodes": [
+        {
+          "id": 1,
+          "label": "Internet Gateway",
+          "role": "gateway",
+          "zone": "internet",
+          "criticality": 5,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 2,
+          "label": "Edge Firewall",
+          "role": "firewall",
+          "zone": "dmz",
+          "criticality": 7,
+          "is_critical": true,
+          "severity": 2,
+          "composite": 29,
+          "factors": {
+            "I": 0.27,
+            "B": 0.0,
+            "C": 0.62,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 3,
+          "label": "Core Router A",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.31,
+            "T": 0.0,
+            "R": 0.0
+          },
+          "degree": 3
+        },
+        {
+          "id": 4,
+          "label": "Core Router B",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.31,
+            "T": 0.0,
+            "R": 0.0
+          },
+          "degree": 3
+        },
+        {
+          "id": 6,
+          "label": "Datacenter Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 4,
+          "composite": 65,
+          "factors": {
+            "I": 1.0,
+            "B": 0.2,
+            "C": 1.0,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 5
+        },
+        {
+          "id": 7,
+          "label": "Web Server",
+          "role": "server",
+          "zone": "dmz",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 8,
+          "label": "App Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 9,
+          "label": "DB Primary",
+          "role": "database",
+          "zone": "data",
+          "criticality": 10,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 10,
+          "label": "DB Replica",
+          "role": "database",
+          "zone": "data",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 11,
+          "label": "Wi-Fi Controller",
+          "role": "wifi",
+          "zone": "internal",
+          "criticality": 3,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 12,
+          "label": "Office Workstations",
+          "role": "client",
+          "zone": "internal",
+          "criticality": 2,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 13,
+          "label": "Auth Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 35,
+          "factors": {
+            "I": 0.21,
+            "B": 0.5,
+            "C": 0.33,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 14,
+          "label": "Backup Vault",
+          "role": "storage",
+          "zone": "data",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 15,
+          "label": "Monitoring Hub",
+          "role": "monitor",
+          "zone": "internal",
+          "criticality": 4,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        }
+      ],
+      "edges": [
+        {
+          "source": 1,
+          "target": 2,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 3,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 15,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 6,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 4,
+          "target": 6,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 6,
+          "target": 9,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 13,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 7,
+          "target": 8,
+          "is_bridge": true,
+          "is_violation": true
+        },
+        {
+          "source": 9,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 11,
+          "target": 12,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 13,
+          "target": 14,
+          "is_bridge": true,
+          "is_violation": true
+        }
+      ],
+      "top_threats": [
+        {
+          "id": 6,
+          "score": 65
+        },
+        {
+          "id": 13,
+          "score": 35
+        },
+        {
+          "id": 2,
+          "score": 29
+        }
+      ],
+      "metrics": {
+        "nodes": 14,
+        "links": 14,
+        "spofs": 3,
+        "bridges": 6,
+        "components": 3,
+        "resilience": 51,
+        "security": 30,
+        "violations": 4
+      },
+      "security": {
+        "configured": true,
+        "score": 30,
+        "violations": [
+          {
+            "source": 6,
+            "target": 9,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 6,
+            "target": 10,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 7,
+            "target": 8,
+            "reason": "Direct dmz <-> internal link with no firewall in between"
+          },
+          {
+            "source": 13,
+            "target": 14,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          }
+        ],
+        "attack_paths": [
+          {
+            "entry": 1,
+            "target": 9,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              9
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 10,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              10
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 14,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              13,
+              14
+            ],
+            "hops": 5,
+            "firewalls": 1
+          }
+        ],
+        "jewels": [
+          9,
+          10,
+          14
+        ],
+        "entries": [
+          1
+        ],
+        "required_depth": 2
+      },
+      "suggestions": [
+        {
+          "from": 14,
+          "to": 1,
+          "fixes": 2,
+          "resolves": false,
+          "severity_before": 2,
+          "severity_after": 1,
+          "spofs_before": 3,
+          "spofs_after": 2
+        },
+        {
+          "from": 1,
+          "to": 10,
+          "fixes": 6,
+          "resolves": false,
+          "severity_before": 4,
+          "severity_after": 2,
+          "spofs_before": 3,
+          "spofs_after": 3
+        }
+      ]
+    },
+    "delta": {
+      "added_nodes": [],
+      "removed_nodes": [
+        5
+      ],
+      "added_edges": [],
+      "removed_edges": [
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          11
+        ]
+      ],
+      "updated_nodes": [
+        {
+          "id": 11,
+          "severity": 0,
+          "is_critical": false
+        }
+      ],
+      "resilience_change": -18,
+      "spof_change": -2
+    },
+    "redesign": {
+      "budget": 15,
+      "spent": 11,
+      "before": {
+        "resilience": 51,
+        "security": 30,
+        "overall": 41,
+        "spofs": 3,
+        "violations": 4,
+        "bridges": 6
+      },
+      "after": {
+        "resilience": 66,
+        "security": 100,
+        "overall": 83,
+        "spofs": 1,
+        "violations": 0,
+        "bridges": 2
+      },
+      "plan": [
+        {
+          "step": 1,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Datacenter Switch and DB Primary, DB Replica (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 64,
+          "resilience_after": 55,
+          "security_after": 72
+        },
+        {
+          "step": 2,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Web Server and App Server (enforces the internal boundary)",
+          "cost": 3,
+          "overall_after": 67,
+          "resilience_after": 52,
+          "security_after": 82
+        },
+        {
+          "step": 3,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Auth Server and Backup Vault (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 78,
+          "resilience_after": 55,
+          "security_after": 100
+        },
+        {
+          "step": 4,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Monitoring Hub <-> Segment Auth Server FW-A (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 81,
+          "resilience_after": 62,
+          "security_after": 100
+        },
+        {
+          "step": 5,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Backup Vault <-> DB Replica (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 83,
+          "resilience_after": 66,
+          "security_after": 100
+        }
+      ],
+      "state_after": {
+        "nodes": [
+          {
+            "id": 1,
+            "label": "Internet Gateway",
+            "role": "gateway",
+            "zone": "internet",
+            "criticality": 5,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 2,
+            "label": "Edge Firewall",
+            "role": "firewall",
+            "zone": "dmz",
+            "criticality": 7,
+            "is_critical": true,
+            "severity": 1,
+            "composite": 53,
+            "factors": {
+              "I": 1.0,
+              "B": 0.0,
+              "C": 0.54,
+              "T": 0.0,
+              "R": 1.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 3,
+            "label": "Core Router A",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.21,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 4,
+            "label": "Core Router B",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.21,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 6,
+            "label": "Datacenter Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 15,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 1.0,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 5
+          },
+          {
+            "id": 7,
+            "label": "Web Server",
+            "role": "server",
+            "zone": "dmz",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.02,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 8,
+            "label": "App Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.02,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 9,
+            "label": "DB Primary",
+            "role": "database",
+            "zone": "data",
+            "criticality": 10,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 10,
+            "label": "DB Replica",
+            "role": "database",
+            "zone": "data",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.32,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 11,
+            "label": "Wi-Fi Controller",
+            "role": "wifi",
+            "zone": "internal",
+            "criticality": 3,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 12,
+            "label": "Office Workstations",
+            "role": "client",
+            "zone": "internal",
+            "criticality": 2,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 13,
+            "label": "Auth Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.37,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 14,
+            "label": "Backup Vault",
+            "role": "storage",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.34,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 15,
+            "label": "Monitoring Hub",
+            "role": "monitor",
+            "zone": "internal",
+            "criticality": 4,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.23,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 16,
+            "label": "Segment Datacenter Switch FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.19,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 17,
+            "label": "Segment Datacenter Switch FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.19,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 18,
+            "label": "Segment Web Server FW-A",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.02,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 19,
+            "label": "Segment Web Server FW-B",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.02,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 20,
+            "label": "Segment Auth Server FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.38,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 21,
+            "label": "Segment Auth Server FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.04,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          }
+        ],
+        "edges": [
+          {
+            "source": 1,
+            "target": 2,
+            "is_bridge": true,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 3,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 15,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 4,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 13,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 10,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 14,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 11,
+            "target": 12,
+            "is_bridge": true,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 15,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          }
+        ],
+        "top_threats": [
+          {
+            "id": 2,
+            "score": 53
+          },
+          {
+            "id": 6,
+            "score": 15
+          },
+          {
+            "id": 20,
+            "score": 6
+          }
+        ],
+        "metrics": {
+          "nodes": 20,
+          "links": 26,
+          "spofs": 1,
+          "bridges": 2,
+          "components": 3,
+          "resilience": 66,
+          "security": 100,
+          "violations": 0
+        },
+        "security": {
+          "configured": true,
+          "score": 100,
+          "violations": [],
+          "attack_paths": [
+            {
+              "entry": 1,
+              "target": 14,
+              "path": [
+                1,
+                2,
+                15,
+                20,
+                14
+              ],
+              "hops": 4,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 9,
+              "path": [
+                1,
+                2,
+                3,
+                6,
+                16,
+                9
+              ],
+              "hops": 5,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 10,
+              "path": [
+                1,
+                2,
+                3,
+                6,
+                16,
+                10
+              ],
+              "hops": 5,
+              "firewalls": 2
+            }
+          ],
+          "jewels": [
+            9,
+            10,
+            14
+          ],
+          "entries": [
+            1
+          ],
+          "required_depth": 2
+        },
+        "suggestions": [
+          {
+            "from": 15,
+            "to": 1,
+            "fixes": 2,
+            "resolves": true,
+            "severity_before": 1,
+            "severity_after": 0,
+            "spofs_before": 1,
+            "spofs_after": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "event": "Standby Switch joined the network (attached to App Server)",
+    "kind": "add_node",
+    "method": "Incremental update",
+    "compute_ms": 0.012,
+    "state": {
+      "nodes": [
+        {
+          "id": 1,
+          "label": "Internet Gateway",
+          "role": "gateway",
+          "zone": "internet",
+          "criticality": 5,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 2,
+          "label": "Edge Firewall",
+          "role": "firewall",
+          "zone": "dmz",
+          "criticality": 7,
+          "is_critical": true,
+          "severity": 2,
+          "composite": 29,
+          "factors": {
+            "I": 0.27,
+            "B": 0.0,
+            "C": 0.62,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 3,
+          "label": "Core Router A",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.31,
+            "T": 0.0,
+            "R": 0.0
+          },
+          "degree": 3
+        },
+        {
+          "id": 4,
+          "label": "Core Router B",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.31,
+            "T": 0.0,
+            "R": 0.0
+          },
+          "degree": 3
+        },
+        {
+          "id": 6,
+          "label": "Datacenter Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 4,
+          "composite": 65,
+          "factors": {
+            "I": 1.0,
+            "B": 0.2,
+            "C": 1.0,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 5
+        },
+        {
+          "id": 7,
+          "label": "Web Server",
+          "role": "server",
+          "zone": "dmz",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 8,
+          "label": "App Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 7,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 16,
+          "factors": {
+            "I": 0.15,
+            "B": 0.0,
+            "C": 0.04,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 9,
+          "label": "DB Primary",
+          "role": "database",
+          "zone": "data",
+          "criticality": 10,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 10,
+          "label": "DB Replica",
+          "role": "database",
+          "zone": "data",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 11,
+          "label": "Wi-Fi Controller",
+          "role": "wifi",
+          "zone": "internal",
+          "criticality": 3,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 12,
+          "label": "Office Workstations",
+          "role": "client",
+          "zone": "internal",
+          "criticality": 2,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 13,
+          "label": "Auth Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 35,
+          "factors": {
+            "I": 0.21,
+            "B": 0.5,
+            "C": 0.33,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 14,
+          "label": "Backup Vault",
+          "role": "storage",
+          "zone": "data",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 15,
+          "label": "Monitoring Hub",
+          "role": "monitor",
+          "zone": "internal",
+          "criticality": 4,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 16,
+          "label": "Standby Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 5,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        }
+      ],
+      "edges": [
+        {
+          "source": 1,
+          "target": 2,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 3,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 15,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 6,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 4,
+          "target": 6,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 6,
+          "target": 9,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 13,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 7,
+          "target": 8,
+          "is_bridge": true,
+          "is_violation": true
+        },
+        {
+          "source": 8,
+          "target": 16,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 9,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 11,
+          "target": 12,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 13,
+          "target": 14,
+          "is_bridge": true,
+          "is_violation": true
+        }
+      ],
+      "top_threats": [
+        {
+          "id": 6,
+          "score": 65
+        },
+        {
+          "id": 13,
+          "score": 35
+        },
+        {
+          "id": 2,
+          "score": 29
+        }
+      ],
+      "metrics": {
+        "nodes": 15,
+        "links": 15,
+        "spofs": 4,
+        "bridges": 7,
+        "components": 3,
+        "resilience": 46,
+        "security": 30,
+        "violations": 4
+      },
+      "security": {
+        "configured": true,
+        "score": 30,
+        "violations": [
+          {
+            "source": 6,
+            "target": 9,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 6,
+            "target": 10,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 7,
+            "target": 8,
+            "reason": "Direct dmz <-> internal link with no firewall in between"
+          },
+          {
+            "source": 13,
+            "target": 14,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          }
+        ],
+        "attack_paths": [
+          {
+            "entry": 1,
+            "target": 9,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              9
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 10,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              10
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 14,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              13,
+              14
+            ],
+            "hops": 5,
+            "firewalls": 1
+          }
+        ],
+        "jewels": [
+          9,
+          10,
+          14
+        ],
+        "entries": [
+          1
+        ],
+        "required_depth": 2
+      },
+      "suggestions": [
+        {
+          "from": 7,
+          "to": 16,
+          "fixes": 8,
+          "resolves": true,
+          "severity_before": 1,
+          "severity_after": 0,
+          "spofs_before": 4,
+          "spofs_after": 3
+        },
+        {
+          "from": 14,
+          "to": 1,
+          "fixes": 2,
+          "resolves": false,
+          "severity_before": 2,
+          "severity_after": 1,
+          "spofs_before": 4,
+          "spofs_after": 3
+        },
+        {
+          "from": 1,
+          "to": 10,
+          "fixes": 6,
+          "resolves": false,
+          "severity_before": 4,
+          "severity_after": 2,
+          "spofs_before": 4,
+          "spofs_after": 4
+        }
+      ]
+    },
+    "delta": {
+      "added_nodes": [
+        16
+      ],
+      "removed_nodes": [],
+      "added_edges": [
+        [
+          8,
+          16
+        ]
+      ],
+      "removed_edges": [],
+      "updated_nodes": [
+        {
+          "id": 8,
+          "severity": 1,
+          "is_critical": true
+        }
+      ],
+      "resilience_change": -5,
+      "spof_change": 1
+    },
+    "redesign": {
+      "budget": 15,
+      "spent": 12,
+      "before": {
+        "resilience": 46,
+        "security": 30,
+        "overall": 38,
+        "spofs": 4,
+        "violations": 4,
+        "bridges": 7
+      },
+      "after": {
+        "resilience": 63,
+        "security": 100,
+        "overall": 82,
+        "spofs": 1,
+        "violations": 0,
+        "bridges": 2
+      },
+      "plan": [
+        {
+          "step": 1,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Datacenter Switch and DB Primary, DB Replica (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 62,
+          "resilience_after": 50,
+          "security_after": 73
+        },
+        {
+          "step": 2,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Web Server and App Server (enforces the internal boundary)",
+          "cost": 3,
+          "overall_after": 65,
+          "resilience_after": 47,
+          "security_after": 83
+        },
+        {
+          "step": 3,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Auth Server and Backup Vault (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 76,
+          "resilience_after": 51,
+          "security_after": 100
+        },
+        {
+          "step": 4,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Monitoring Hub <-> Segment Auth Server FW-A (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 79,
+          "resilience_after": 57,
+          "security_after": 100
+        },
+        {
+          "step": 5,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Backup Vault <-> DB Replica (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 81,
+          "resilience_after": 61,
+          "security_after": 100
+        },
+        {
+          "step": 6,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Segment Web Server FW-A <-> Standby Switch (removes the single point of failure at App Server)",
+          "cost": 1,
+          "overall_after": 82,
+          "resilience_after": 63,
+          "security_after": 100
+        }
+      ],
+      "state_after": {
+        "nodes": [
+          {
+            "id": 1,
+            "label": "Internet Gateway",
+            "role": "gateway",
+            "zone": "internet",
+            "criticality": 5,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 2,
+            "label": "Edge Firewall",
+            "role": "firewall",
+            "zone": "dmz",
+            "criticality": 7,
+            "is_critical": true,
+            "severity": 1,
+            "composite": 53,
+            "factors": {
+              "I": 1.0,
+              "B": 0.0,
+              "C": 0.54,
+              "T": 0.0,
+              "R": 1.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 3,
+            "label": "Core Router A",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.21,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 4,
+            "label": "Core Router B",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.21,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 6,
+            "label": "Datacenter Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 15,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 1.0,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 5
+          },
+          {
+            "id": 7,
+            "label": "Web Server",
+            "role": "server",
+            "zone": "dmz",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.02,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 8,
+            "label": "App Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 1,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.05,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 9,
+            "label": "DB Primary",
+            "role": "database",
+            "zone": "data",
+            "criticality": 10,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 10,
+            "label": "DB Replica",
+            "role": "database",
+            "zone": "data",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.32,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 11,
+            "label": "Wi-Fi Controller",
+            "role": "wifi",
+            "zone": "internal",
+            "criticality": 3,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 12,
+            "label": "Office Workstations",
+            "role": "client",
+            "zone": "internal",
+            "criticality": 2,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 13,
+            "label": "Auth Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.37,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 14,
+            "label": "Backup Vault",
+            "role": "storage",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.34,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 15,
+            "label": "Monitoring Hub",
+            "role": "monitor",
+            "zone": "internal",
+            "criticality": 4,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.23,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 16,
+            "label": "Standby Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 5,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 17,
+            "label": "Segment Datacenter Switch FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.19,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 18,
+            "label": "Segment Datacenter Switch FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.19,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 19,
+            "label": "Segment Web Server FW-A",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 1,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.05,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 20,
+            "label": "Segment Web Server FW-B",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.02,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 21,
+            "label": "Segment Auth Server FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 6,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.38,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 22,
+            "label": "Segment Auth Server FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.04,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          }
+        ],
+        "edges": [
+          {
+            "source": 1,
+            "target": 2,
+            "is_bridge": true,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 3,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 15,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 4,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 13,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 10,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 14,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 11,
+            "target": 12,
+            "is_bridge": true,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 22,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 22,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 15,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 16,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          }
+        ],
+        "top_threats": [
+          {
+            "id": 2,
+            "score": 53
+          },
+          {
+            "id": 6,
+            "score": 15
+          },
+          {
+            "id": 21,
+            "score": 6
+          }
+        ],
+        "metrics": {
+          "nodes": 21,
+          "links": 28,
+          "spofs": 1,
+          "bridges": 2,
+          "components": 3,
+          "resilience": 63,
+          "security": 100,
+          "violations": 0
+        },
+        "security": {
+          "configured": true,
+          "score": 100,
+          "violations": [],
+          "attack_paths": [
+            {
+              "entry": 1,
+              "target": 14,
+              "path": [
+                1,
+                2,
+                15,
+                21,
+                14
+              ],
+              "hops": 4,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 9,
+              "path": [
+                1,
+                2,
+                3,
+                6,
+                17,
+                9
+              ],
+              "hops": 5,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 10,
+              "path": [
+                1,
+                2,
+                3,
+                6,
+                17,
+                10
+              ],
+              "hops": 5,
+              "firewalls": 2
+            }
+          ],
+          "jewels": [
+            9,
+            10,
+            14
+          ],
+          "entries": [
+            1
+          ],
+          "required_depth": 2
+        },
+        "suggestions": [
+          {
+            "from": 15,
+            "to": 1,
+            "fixes": 2,
+            "resolves": true,
+            "severity_before": 1,
+            "severity_after": 0,
+            "spofs_before": 1,
+            "spofs_after": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "event": "New redundant link: Standby Switch \u2194 Core Router A",
+    "kind": "add_link",
+    "method": "Full recompute",
+    "compute_ms": 0.022,
+    "state": {
+      "nodes": [
+        {
+          "id": 1,
+          "label": "Internet Gateway",
+          "role": "gateway",
+          "zone": "internet",
+          "criticality": 5,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 2,
+          "label": "Edge Firewall",
+          "role": "firewall",
+          "zone": "dmz",
+          "criticality": 7,
+          "is_critical": true,
+          "severity": 2,
+          "composite": 28,
+          "factors": {
+            "I": 0.27,
+            "B": 0.0,
+            "C": 0.58,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 3,
+          "label": "Core Router A",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 3,
+          "composite": 52,
+          "factors": {
+            "I": 0.61,
+            "B": 0.25,
+            "C": 0.96,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 4
+        },
+        {
+          "id": 4,
+          "label": "Core Router B",
+          "role": "router",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 3,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.21,
+            "T": 0.0,
+            "R": 0.0
+          },
+          "degree": 3
+        },
+        {
+          "id": 6,
+          "label": "Datacenter Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 4,
+          "composite": 65,
+          "factors": {
+            "I": 1.0,
+            "B": 0.2,
+            "C": 1.0,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 5
+        },
+        {
+          "id": 7,
+          "label": "Web Server",
+          "role": "server",
+          "zone": "dmz",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 8,
+          "label": "App Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 7,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 36,
+          "factors": {
+            "I": 0.24,
+            "B": 0.5,
+            "C": 0.31,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 9,
+          "label": "DB Primary",
+          "role": "database",
+          "zone": "data",
+          "criticality": 10,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 10,
+          "label": "DB Replica",
+          "role": "database",
+          "zone": "data",
+          "criticality": 8,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 2,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.2
+          },
+          "degree": 2
+        },
+        {
+          "id": 11,
+          "label": "Wi-Fi Controller",
+          "role": "wifi",
+          "zone": "internal",
+          "criticality": 3,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 12,
+          "label": "Office Workstations",
+          "role": "client",
+          "zone": "internal",
+          "criticality": 2,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 13,
+          "label": "Auth Server",
+          "role": "server",
+          "zone": "internal",
+          "criticality": 8,
+          "is_critical": true,
+          "severity": 1,
+          "composite": 35,
+          "factors": {
+            "I": 0.21,
+            "B": 0.5,
+            "C": 0.31,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        },
+        {
+          "id": 14,
+          "label": "Backup Vault",
+          "role": "storage",
+          "zone": "data",
+          "criticality": 7,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 15,
+          "label": "Monitoring Hub",
+          "role": "monitor",
+          "zone": "internal",
+          "criticality": 4,
+          "is_critical": false,
+          "severity": 0,
+          "composite": 5,
+          "factors": {
+            "I": 0.0,
+            "B": 0.0,
+            "C": 0.0,
+            "T": 0.0,
+            "R": 0.5
+          },
+          "degree": 1
+        },
+        {
+          "id": 16,
+          "label": "Standby Switch",
+          "role": "switch",
+          "zone": "internal",
+          "criticality": 5,
+          "is_critical": true,
+          "severity": 2,
+          "composite": 59,
+          "factors": {
+            "I": 0.45,
+            "B": 1.0,
+            "C": 0.56,
+            "T": 0.0,
+            "R": 1.0
+          },
+          "degree": 2
+        }
+      ],
+      "edges": [
+        {
+          "source": 1,
+          "target": 2,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 3,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 2,
+          "target": 15,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 4,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 6,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 3,
+          "target": 16,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 4,
+          "target": 6,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 6,
+          "target": 9,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": true
+        },
+        {
+          "source": 6,
+          "target": 13,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 7,
+          "target": 8,
+          "is_bridge": true,
+          "is_violation": true
+        },
+        {
+          "source": 8,
+          "target": 16,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 9,
+          "target": 10,
+          "is_bridge": false,
+          "is_violation": false
+        },
+        {
+          "source": 11,
+          "target": 12,
+          "is_bridge": true,
+          "is_violation": false
+        },
+        {
+          "source": 13,
+          "target": 14,
+          "is_bridge": true,
+          "is_violation": true
+        }
+      ],
+      "top_threats": [
+        {
+          "id": 6,
+          "score": 65
+        },
+        {
+          "id": 16,
+          "score": 59
+        },
+        {
+          "id": 3,
+          "score": 52
+        }
+      ],
+      "metrics": {
+        "nodes": 15,
+        "links": 16,
+        "spofs": 6,
+        "bridges": 8,
+        "components": 2,
+        "resilience": 53,
+        "security": 30,
+        "violations": 4
+      },
+      "security": {
+        "configured": true,
+        "score": 30,
+        "violations": [
+          {
+            "source": 6,
+            "target": 9,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 6,
+            "target": 10,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          },
+          {
+            "source": 7,
+            "target": 8,
+            "reason": "Direct dmz <-> internal link with no firewall in between"
+          },
+          {
+            "source": 13,
+            "target": 14,
+            "reason": "Direct internal <-> data link with no firewall in between"
+          }
+        ],
+        "attack_paths": [
+          {
+            "entry": 1,
+            "target": 9,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              9
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 10,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              10
+            ],
+            "hops": 4,
+            "firewalls": 1
+          },
+          {
+            "entry": 1,
+            "target": 14,
+            "path": [
+              1,
+              2,
+              3,
+              6,
+              13,
+              14
+            ],
+            "hops": 5,
+            "firewalls": 1
+          }
+        ],
+        "jewels": [
+          9,
+          10,
+          14
+        ],
+        "entries": [
+          1
+        ],
+        "required_depth": 2
+      },
+      "suggestions": [
+        {
+          "from": 1,
+          "to": 7,
+          "fixes": 3,
+          "resolves": true,
+          "severity_before": 3,
+          "severity_after": 0,
+          "spofs_before": 6,
+          "spofs_after": 3
+        },
+        {
+          "from": 14,
+          "to": 1,
+          "fixes": 2,
+          "resolves": false,
+          "severity_before": 2,
+          "severity_after": 1,
+          "spofs_before": 6,
+          "spofs_after": 5
+        },
+        {
+          "from": 1,
+          "to": 10,
+          "fixes": 6,
+          "resolves": false,
+          "severity_before": 4,
+          "severity_after": 2,
+          "spofs_before": 6,
+          "spofs_after": 6
+        }
+      ]
+    },
+    "delta": {
+      "added_nodes": [],
+      "removed_nodes": [],
+      "added_edges": [
+        [
+          3,
+          16
+        ]
+      ],
+      "removed_edges": [],
+      "updated_nodes": [
+        {
+          "id": 3,
+          "severity": 3,
+          "is_critical": true
+        },
+        {
+          "id": 16,
+          "severity": 2,
+          "is_critical": true
+        }
+      ],
+      "resilience_change": 7,
+      "spof_change": 2
+    },
+    "redesign": {
+      "budget": 15,
+      "spent": 12,
+      "before": {
+        "resilience": 53,
+        "security": 30,
+        "overall": 42,
+        "spofs": 6,
+        "violations": 4,
+        "bridges": 8
+      },
+      "after": {
+        "resilience": 86,
+        "security": 100,
+        "overall": 93,
+        "spofs": 1,
+        "violations": 0,
+        "bridges": 2
+      },
+      "plan": [
+        {
+          "step": 1,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Datacenter Switch and DB Primary, DB Replica (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 65,
+          "resilience_after": 56,
+          "security_after": 74
+        },
+        {
+          "step": 2,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Web Server and App Server (enforces the internal boundary)",
+          "cost": 3,
+          "overall_after": 72,
+          "resilience_after": 61,
+          "security_after": 83
+        },
+        {
+          "step": 3,
+          "type": "SEGMENT",
+          "description": "Segment: insert a redundant firewall pair between Auth Server and Backup Vault (enforces the data boundary)",
+          "cost": 3,
+          "overall_after": 82,
+          "resilience_after": 64,
+          "security_after": 100
+        },
+        {
+          "step": 4,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Monitoring Hub <-> Segment Web Server FW-A (removes the single point of failure at Standby Switch)",
+          "cost": 1,
+          "overall_after": 87,
+          "resilience_after": 73,
+          "security_after": 100
+        },
+        {
+          "step": 5,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Monitoring Hub <-> Segment Auth Server FW-A (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 90,
+          "resilience_after": 80,
+          "security_after": 100
+        },
+        {
+          "step": 6,
+          "type": "ADD_LINK",
+          "description": "Add redundant link Backup Vault <-> DB Replica (removes the single point of failure at Datacenter Switch)",
+          "cost": 1,
+          "overall_after": 93,
+          "resilience_after": 86,
+          "security_after": 100
+        }
+      ],
+      "state_after": {
+        "nodes": [
+          {
+            "id": 1,
+            "label": "Internet Gateway",
+            "role": "gateway",
+            "zone": "internet",
+            "criticality": 5,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 2,
+            "label": "Edge Firewall",
+            "role": "firewall",
+            "zone": "dmz",
+            "criticality": 7,
+            "is_critical": true,
+            "severity": 1,
+            "composite": 53,
+            "factors": {
+              "I": 1.0,
+              "B": 0.0,
+              "C": 0.56,
+              "T": 0.0,
+              "R": 1.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 3,
+            "label": "Core Router A",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 11,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.71,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 4,
+            "label": "Core Router B",
+            "role": "router",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.16,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 6,
+            "label": "Datacenter Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 15,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 1.0,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 5
+          },
+          {
+            "id": 7,
+            "label": "Web Server",
+            "role": "server",
+            "zone": "dmz",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.07,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 8,
+            "label": "App Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.36,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 9,
+            "label": "DB Primary",
+            "role": "database",
+            "zone": "data",
+            "criticality": 10,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 0,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.01,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 10,
+            "label": "DB Replica",
+            "role": "database",
+            "zone": "data",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 4,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.26,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 4
+          },
+          {
+            "id": 11,
+            "label": "Wi-Fi Controller",
+            "role": "wifi",
+            "zone": "internal",
+            "criticality": 3,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 12,
+            "label": "Office Workstations",
+            "role": "client",
+            "zone": "internal",
+            "criticality": 2,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.0,
+              "T": 0.0,
+              "R": 0.5
+            },
+            "degree": 1
+          },
+          {
+            "id": 13,
+            "label": "Auth Server",
+            "role": "server",
+            "zone": "internal",
+            "criticality": 8,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.33,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 14,
+            "label": "Backup Vault",
+            "role": "storage",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 5,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.36,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 15,
+            "label": "Monitoring Hub",
+            "role": "monitor",
+            "zone": "internal",
+            "criticality": 4,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 12,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.82,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 16,
+            "label": "Standby Switch",
+            "role": "switch",
+            "zone": "internal",
+            "criticality": 5,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 8,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.38,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 17,
+            "label": "Segment Datacenter Switch FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.18,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 18,
+            "label": "Segment Datacenter Switch FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.18,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 19,
+            "label": "Segment Web Server FW-A",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 8,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.53,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 20,
+            "label": "Segment Web Server FW-B",
+            "role": "firewall",
+            "zone": "internal",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 3,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.04,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          },
+          {
+            "id": 21,
+            "label": "Segment Auth Server FW-A",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 9,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.59,
+              "T": 0.0,
+              "R": 0.0
+            },
+            "degree": 3
+          },
+          {
+            "id": 22,
+            "label": "Segment Auth Server FW-B",
+            "role": "firewall",
+            "zone": "data",
+            "criticality": 7,
+            "is_critical": false,
+            "severity": 0,
+            "composite": 2,
+            "factors": {
+              "I": 0.0,
+              "B": 0.0,
+              "C": 0.03,
+              "T": 0.0,
+              "R": 0.2
+            },
+            "degree": 2
+          }
+        ],
+        "edges": [
+          {
+            "source": 1,
+            "target": 2,
+            "is_bridge": true,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 3,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 2,
+            "target": 15,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 4,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 3,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 4,
+            "target": 6,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 13,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 6,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 7,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 16,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 8,
+            "target": 20,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 10,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 9,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 17,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 18,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 10,
+            "target": 14,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 11,
+            "target": 12,
+            "is_bridge": true,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 13,
+            "target": 22,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 14,
+            "target": 22,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 15,
+            "target": 19,
+            "is_bridge": false,
+            "is_violation": false
+          },
+          {
+            "source": 15,
+            "target": 21,
+            "is_bridge": false,
+            "is_violation": false
+          }
+        ],
+        "top_threats": [
+          {
+            "id": 2,
+            "score": 53
+          },
+          {
+            "id": 6,
+            "score": 15
+          },
+          {
+            "id": 15,
+            "score": 12
+          }
+        ],
+        "metrics": {
+          "nodes": 21,
+          "links": 29,
+          "spofs": 1,
+          "bridges": 2,
+          "components": 2,
+          "resilience": 86,
+          "security": 100,
+          "violations": 0
+        },
+        "security": {
+          "configured": true,
+          "score": 100,
+          "violations": [],
+          "attack_paths": [
+            {
+              "entry": 1,
+              "target": 14,
+              "path": [
+                1,
+                2,
+                15,
+                21,
+                14
+              ],
+              "hops": 4,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 9,
+              "path": [
+                1,
+                2,
+                3,
+                6,
+                17,
+                9
+              ],
+              "hops": 5,
+              "firewalls": 2
+            },
+            {
+              "entry": 1,
+              "target": 10,
+              "path": [
+                1,
+                2,
+                3,
+                6,
+                17,
+                10
+              ],
+              "hops": 5,
+              "firewalls": 2
+            }
+          ],
+          "jewels": [
+            9,
+            10,
+            14
+          ],
+          "entries": [
+            1
+          ],
+          "required_depth": 2
+        },
+        "suggestions": [
+          {
+            "from": 16,
+            "to": 1,
+            "fixes": 2,
+            "resolves": true,
+            "severity_before": 1,
+            "severity_after": 0,
+            "spofs_before": 1,
+            "spofs_after": 0
+          }
+        ]
+      }
     }
   }
 ]

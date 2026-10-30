@@ -1,0 +1,21 @@
+{
+  "budget": 12,
+  "nodes": [
+    { "id": "isp",  "label": "ISP Uplink",   "role": "gateway",  "zone": "internet", "criticality": 4 },
+    { "id": "fw",   "label": "Perimeter FW", "role": "firewall", "zone": "dmz",      "criticality": 8 },
+    { "id": "web",  "label": "Web Server",   "role": "server",   "zone": "dmz",      "criticality": 7 },
+    { "id": "core", "label": "Core Switch",  "role": "switch",   "zone": "internal", "criticality": 8 },
+    { "id": "app",  "label": "App Server",   "role": "server",   "zone": "internal", "criticality": 6 },
+    { "id": "pc",   "label": "Office PCs",   "role": "client",   "zone": "internal", "criticality": 2 },
+    { "id": "db",   "label": "Customer DB",  "role": "database", "zone": "data",     "criticality": 10 }
+  ],
+  "edges": [
+    { "source": "isp",  "target": "fw" },
+    { "source": "fw",   "target": "web" },
+    { "source": "fw",   "target": "core" },
+    { "source": "web",  "target": "db" },
+    { "source": "core", "target": "app" },
+    { "source": "core", "target": "pc" },
+    { "source": "app",  "target": "db" }
+  ]
+}

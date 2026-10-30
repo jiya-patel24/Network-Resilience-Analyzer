@@ -3,154 +3,157 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
   <title>Network Resilience Analyzer</title>
-
-  <!-- Fonts (needs internet for now; we'll self-host them in the polish stage) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="selected.css">
-  <link rel="stylesheet" href="simulation.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 <body>
+  <div class="bg-grid"></div>
 
   <header class="topbar">
     <div class="brand">
-      <h1 class="brand-title">Network Resilience Analyzer</h1>
-      <p class="brand-sub">Single points of failure, ranked by impact</p>
+      <svg class="logo" viewBox="0 0 40 40" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#38E1C6"/><stop offset="1" stop-color="#8B7BFF"/></linearGradient></defs>
+        <rect x="1" y="1" width="38" height="38" rx="11" fill="rgba(56,225,198,.08)" stroke="url(#lg)" stroke-width="1.5"/>
+        <path d="M11 26 20 12l9 14M11 26h18" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="20" cy="12" r="3.2" fill="#FF5C7A"/><circle cx="11" cy="26" r="3" fill="#38E1C6"/><circle cx="29" cy="26" r="3" fill="#38E1C6"/>
+      </svg>
+      <div>
+        <h1>Network Resilience Analyzer</h1>
+        <p class="brand-sub">Find single points of failure, enforce segmentation, and plan a budget-ranked redesign.</p>
+      </div>
     </div>
-    <p class="stats" id="stats" aria-live="polite"></p>
+    <div class="actions">
+      <span class="badge" id="engine-badge">Engine: loading…</span>
+      <button class="btn ghost" id="btn-path" type="button" title="Highlight the attacker's easiest route to a crown jewel">⚔ Attack path</button>
+      <label class="btn ghost" for="file-upload" title="Upload a network as JSON">⬆ Upload network</label>
+      <input type="file" id="file-upload" accept=".json,application/json" hidden>
+      <button class="btn" id="btn-demo" type="button">▶ Run guided demo</button>
+      <button class="btn ghost" id="btn-full" type="button" title="Fullscreen">⛶</button>
+    </div>
   </header>
 
+  <section class="kpis">
+    <div class="kpi kpi-score" id="kpi-score-card">
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 100 100" class="gauge" aria-hidden="true">
+          <circle class="g-bg" cx="50" cy="50" r="42"/>
+          <circle class="g-fg" id="gauge-ring" cx="50" cy="50" r="42" transform="rotate(-90 50 50)"/>
+        </svg>
+        <div class="gauge-num"><span id="kpi-score">0</span></div>
+      </div>
+      <div class="kpi-text">
+        <span class="kpi-label">Resilience score</span>
+        <span class="kpi-grade" id="score-grade">—</span>
+      </div>
+    </div>
+    <div class="kpi"><span class="kpi-label">Devices online</span><span class="kpi-value" id="kpi-nodes">0</span><span class="kpi-sub" id="kpi-nodes-sub"></span></div>
+    <div class="kpi"><span class="kpi-label">Links</span><span class="kpi-value" id="kpi-links">0</span><span class="kpi-sub">active connections</span></div>
+    <div class="kpi kpi-red"><span class="kpi-label">Single points of failure</span><span class="kpi-value" id="kpi-spofs">0</span><span class="kpi-sub">critical devices</span></div>
+    <div class="kpi kpi-amber"><span class="kpi-label">Critical links</span><span class="kpi-value" id="kpi-bridges">0</span><span class="kpi-sub">bridges</span></div>
+    <div class="kpi"><span class="kpi-label">Network pieces</span><span class="kpi-value" id="kpi-pieces">1</span><span class="kpi-sub" id="kpi-pieces-sub">fully connected</span></div>
+    <div class="kpi"><span class="kpi-label">Security score</span><span class="kpi-value" id="kpi-sec">–</span><span class="kpi-sub" id="kpi-sec-sub">zones &amp; firewalls</span></div>
+    <div class="kpi kpi-red"><span class="kpi-label">Policy violations</span><span class="kpi-value" id="kpi-viol">0</span><span class="kpi-sub">illegal cross-zone links</span></div>
+  </section>
+
   <main class="layout">
-
-    <!-- LEFT COLUMN: graph + timeline -->
     <section class="main-col">
-
       <div class="panel canvas" id="canvas">
-        <span class="eyebrow canvas-label">Network graph</span>
-
-        <!-- Stage 5: shown only while a simulation is active -->
+        <span class="eyebrow canvas-label">Live topology</span>
         <div class="sim-banner" id="sim-banner" role="status" hidden></div>
+        <svg id="graph" role="img" aria-label="Network graph"></svg>
 
-        <svg id="graph" role="img" aria-label="Network graph. Larger red-brown circles are critical nodes."></svg>
-
-        <!-- Compact legend -->
         <div class="key" aria-hidden="true">
-          <span class="key-item"><span class="dot dot-critical"></span>Critical node</span>
-          <span class="key-item"><span class="dot dot-normal"></span>Normal node</span>
-          <span class="key-item">
-            <span class="dot dot-small"></span><span class="dot dot-large"></span>Size = severity
+          <span class="key-item"><i class="dot d-normal"></i>Healthy</span>
+          <span class="key-item"><i class="dot d-critical"></i>Single point of failure</span>
+          <span class="key-item"><i class="line l-bridge"></i>Critical link</span>
+          <span class="key-item"><i class="line l-viol"></i>Policy violation</span>
+          <span class="key-item" id="key-island" hidden><i class="dot d-island"></i>Cut-off piece</span>
+          <span class="key-item"><i class="dot d-dead"></i>Failed</span>
+          <span class="key-item key-zones">
+            <i class="ring z-internet"></i>internet
+            <i class="ring z-dmz"></i>dmz
+            <i class="ring z-internal"></i>internal
+            <i class="ring z-data"></i>data ★
           </span>
-          <!-- Stage 5: only visible when a simulation has split the network -->
-          <span class="key-item" id="key-island" hidden><span class="dot dot-island"></span>Cut-off piece</span>
         </div>
-
-        <!-- Custom hover tooltip (filled by app.js) -->
         <div class="tooltip" id="tooltip" role="tooltip"></div>
-
-        <!-- Shown only if the data files fail to load -->
         <div class="message" id="message" hidden></div>
       </div>
 
-      <!-- Timeline: playback controls, event track, caption -->
       <div class="panel timeline">
         <div class="timeline-head">
-          <span class="eyebrow">Timeline</span>
-          <p class="timeline-caption" id="timeline-caption" aria-live="polite"></p>
+          <span class="eyebrow">Event timeline</span>
+          <p class="timeline-caption" id="timeline-caption"></p>
+          <div class="chips" id="timeline-chips"></div>
           <span class="timeline-count" id="timeline-count"></span>
         </div>
-
+        <svg id="spark" class="spark" aria-label="Resilience score over time"></svg>
         <div class="timeline-controls">
-          <button class="icon-btn" id="btn-prev" type="button" aria-label="Previous event">
-            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-              <path d="M9 2.5 4.5 7 9 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-
-          <button class="play-btn" id="btn-play" type="button"></button>
-
-          <button class="icon-btn" id="btn-next" type="button" aria-label="Next event">
-            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-              <path d="M5 2.5 9.5 7 5 11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-
+          <button class="icon-btn" id="btn-prev" type="button" aria-label="Previous event">‹</button>
+          <button class="play-btn" id="btn-play" type="button">Play</button>
+          <button class="icon-btn" id="btn-next" type="button" aria-label="Next event">›</button>
           <div class="track" id="track"></div>
+          <span class="hint-keys">← → step · Space play</span>
         </div>
       </div>
-
     </section>
 
-    <!-- RIGHT COLUMN: analysis cards -->
-    <aside class="panel side">
-
-      <section class="side-section" id="ranking-section">
-        <span class="eyebrow">Ranking</span>
-        <p class="ranking-note">
-          If one of these nodes fails, the network splits. The number is how many
-          nodes get cut off from the main part.
-        </p>
-        <ol class="ranking-list" id="ranking-list"></ol>
-        <p class="ranking-empty" id="ranking-empty" hidden>
-          No single points of failure. Every node can fail without splitting the network.
-        </p>
+    <aside class="side">
+      <section class="panel">
+        <div class="panel-head"><span class="eyebrow">Top threats</span></div>
+        <ol class="threat-list" id="threat-list"></ol>
+        <p class="empty" id="threat-empty" hidden>✓ No single points of failure. Any one device can fail without splitting the network.</p>
       </section>
 
-      <section class="side-section" id="selected-section">
-        <span class="eyebrow">Selected node</span>
-        <div id="selected-body" aria-live="polite"></div>
+      <section class="panel">
+        <div class="panel-head"><span class="eyebrow">Inspector</span></div>
+        <div id="selected-body"></div>
       </section>
 
-      <!-- Stage 5: Simulation card. app.js fills in the text and enables/disables the buttons. -->
-      <section class="side-section" id="simulation-section">
-        <span class="eyebrow">Simulation</span>
-        <p class="sim-intro">
-          Fail a node and watch the network react. This is a what-if view only:
-          the original timeline is never changed.
-        </p>
-
-        <div class="sim-modes" role="group" aria-label="Failure mode">
-          <button class="sim-mode is-on" id="sim-mode-targeted" type="button" aria-pressed="true">Targeted</button>
-          <button class="sim-mode" id="sim-mode-random" type="button" aria-pressed="false">Random</button>
+      <section class="panel attack">
+        <div class="panel-head"><span class="eyebrow">Attack lab</span></div>
+        <p class="muted small">Fail a device and watch the network react. A what-if view only: the timeline is never changed.</p>
+        <div class="seg" role="group" aria-label="Attack mode">
+          <button class="seg-btn is-on" id="mode-targeted" type="button">🎯 Targeted</button>
+          <button class="seg-btn" id="mode-random" type="button">🎲 Random</button>
         </div>
-        <p class="sim-mode-note" id="sim-mode-note"></p>
-
-        <div class="sim-actions">
-          <button class="sim-run" id="sim-run" type="button"></button>
-          <button class="sim-reset" id="sim-reset" type="button">Reset simulation</button>
+        <p class="muted small" id="mode-note"></p>
+        <div class="row">
+          <button class="btn danger grow" id="btn-attack" type="button">Launch attack</button>
+          <button class="btn ghost" id="btn-reset" type="button">Reset</button>
         </div>
-        <p class="sim-hint" id="sim-hint" aria-live="polite"></p>
-
-        <div class="sim-result" id="sim-result" aria-live="polite" hidden>
-          <h3 class="sim-result-title" id="sim-result-title"></h3>
-
-          <div class="sel-stats">
-            <div class="sel-stat">
-              <span class="sel-stat-value" id="sim-stat-cut"></span>
-              <span class="sel-stat-label">Nodes cut off</span>
-            </div>
-            <div class="sel-stat">
-              <span class="sel-stat-value" id="sim-stat-pieces"></span>
-              <span class="sel-stat-label">Separate pieces</span>
-            </div>
+        <p class="hint" id="sim-hint" aria-live="polite">Tip: double-click any node to fail it.</p>
+        <div class="sim-result" id="sim-result" hidden>
+          <h3 id="sim-title"></h3>
+          <div class="stat-pair">
+            <div><b id="sim-cut">0</b><span>nodes cut off</span></div>
+            <div><b id="sim-pieces">1</b><span>separate pieces</span></div>
           </div>
-
-          <p class="sel-note" id="sim-compare"></p>
-
-          <span class="sel-sub">Failed so far</span>
-          <div class="sim-failed" id="sim-failed"></div>
+          <p class="muted small" id="sim-compare"></p>
+          <div class="chips" id="sim-failed"></div>
         </div>
       </section>
 
-    </aside>
+      <section class="panel advisor">
+        <div class="panel-head"><span class="eyebrow">Hardening advisor</span></div>
+        <div id="advisor-list"></div>
+        <p class="empty" id="advisor-empty" hidden>✓ Nothing to fix. The network is fully hardened.</p>
+      </section>
 
+      <section class="panel redesign">
+        <div class="panel-head"><span class="eyebrow">Budget redesign</span></div>
+        <div id="redesign-body"></div>
+      </section>
+    </aside>
   </main>
 
+  <div class="toast" id="toast" role="status"></div>
   <script src="app.js"></script>
+  <script src="security.js"></script>
 </body>
 </html>

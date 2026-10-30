@@ -1,77 +1,64 @@
-"""
-export.py
-
-Turns the engine's internal graph state (a Graph object, plus the
-critical-node/severity info from tarjan.py) into a plain dictionary
-that can be saved as JSON. This is the ONLY thing the frontend reads -
-it never touches the Python code directly.
-"""
+"""export.py: turns engine state into the JSON the dashboard reads."""
 
 import json
 from graph import Graph
-from tarjan import find_articulation_points
+from tarjan import analyze_network
+from structures import MaxHeap
+from suggestions import suggest_fixes
+from severity import composite_severity
+from security import security_report
+from scoring import network_metrics
+
+BIG_GRAPH = 300   # above this: sampled centrality, no suggestions
 
 
-def export_graph_state(graph, critical_nodes=None):
-    """
-    Parameters:
-        graph: a Graph object from graph.py
-        critical_nodes: optional dict of {node_id: severity_score}.
-                        Pass this in if you've already computed it
-                        (e.g. after an incremental update), so we don't
-                        waste time recomputing it here. If you don't
-                        pass anything, it's computed fresh.
-
-    Returns a dictionary shaped like:
-        {
-            "nodes": [{"id": ..., "is_critical": ..., "severity": ...}, ...],
-            "edges": [{"source": ..., "target": ...}, ...]
-        }
-    """
+def export_graph_state(graph, critical_nodes=None, weights=None):
+    analysis = analyze_network(graph)
     if critical_nodes is None:
-        critical_nodes = find_articulation_points(graph)
+        critical_nodes = analysis["articulation_points"]
+    n_nodes = len(graph.nodes())
+    comp = composite_severity(graph, analysis, weights, sample=None if n_nodes <= BIG_GRAPH else 64)
+    report = security_report(graph)
 
-    # Build the nodes list. Every node gets a severity (0 if it's not critical),
-    # so the frontend doesn't need an "if severity exists" check later.
-    nodes_list = []
+    bridge_keys = {frozenset(b) for b in analysis["bridges"]}
+    viol_keys = {frozenset((v["source"], v["target"])) for v in report["violations"]}
+
+    nodes = []
     for node_id in graph.nodes():
-        nodes_list.append({
+        meta = graph.meta.get(node_id, {})
+        nodes.append({
             "id": node_id,
+            "label": meta.get("label", f"Node {node_id}"),
+            "role": meta.get("role", "server"),
+            "zone": meta.get("zone"),
+            "criticality": meta.get("criticality", 3),
             "is_critical": node_id in critical_nodes,
-            "severity": critical_nodes.get(node_id, 0)
+            "severity": critical_nodes.get(node_id, 0),
+            "composite": comp[node_id]["score"],
+            "factors": comp[node_id]["factors"],
+            "degree": graph.degree(node_id),
         })
 
-    # Build the edges list, deduping. adjacency_list stores each edge
-    # twice (u->v and v->u), so without this we'd emit every edge twice.
-    edges_list = []
-    seen_edges = set()
-    for node_id in graph.nodes():
-        for neighbor in graph.get_neighbors(node_id):
-            edge_key = tuple(sorted((node_id, neighbor)))
-            if edge_key not in seen_edges:
-                seen_edges.add(edge_key)
-                edges_list.append({"source": edge_key[0], "target": edge_key[1]})
+    edges = [{"source": u, "target": v,
+              "is_bridge": frozenset((u, v)) in bridge_keys,
+              "is_violation": frozenset((u, v)) in viol_keys}
+             for u, v in graph.edges()]
+
+    heap = MaxHeap()
+    for n in nodes:
+        heap.push(n["composite"], n["id"])
+    top_threats = [{"id": i, "score": s} for s, i in heap.top_k(3)]
+
+    metrics = network_metrics(graph, analysis)
+    metrics["security"] = report["score"]
+    metrics["violations"] = len(report["violations"])
 
     return {
-        "nodes": nodes_list,
-        "edges": edges_list
+        "nodes": nodes, "edges": edges, "top_threats": top_threats, "metrics": metrics,
+        "security": report,
+        "suggestions": suggest_fixes(graph, critical_nodes) if n_nodes <= BIG_GRAPH else [],
     }
 
 
 def export_graph_state_json(graph, critical_nodes=None):
-    """Same as export_graph_state, but returns a ready-to-save JSON string."""
     return json.dumps(export_graph_state(graph, critical_nodes), indent=2)
-
-
-if __name__ == "__main__":
-    # Same test graph you've been using everywhere else, so the output
-    # here should line up with what you already know: critical points
-    # {3, 4} with severities {3: 2, 4: 1}.
-    g = Graph()
-    g.add_edge(1, 2)
-    g.add_edge(2, 3)
-    g.add_edge(3, 1)
-    g.add_edge(3, 4)
-    g.add_edge(4, 5)
-
-    print(export_graph_state_json(g))
