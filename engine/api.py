@@ -149,9 +149,13 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 def main():
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
-    server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    print(f"Serving dashboard + API on http://127.0.0.1:{port}  (Ctrl+C to stop)")
+    host = "0.0.0.0"
+    port = int(os.environ.get("PORT", sys.argv[1] if len(sys.argv) > 1 else 8000))
+
+    server = ThreadingHTTPServer((host, port), Handler)
+
+    print(f"Serving dashboard + API on port {port} (Ctrl+C to stop)")
+
     try:
         server.serve_forever()
     except KeyboardInterrupt:
