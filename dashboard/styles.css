@@ -339,3 +339,107 @@ body {
         min-height: 420px;
     }
 }
+
+/* ===== FINAL DASHBOARD LAYOUT FIX ===== */
+
+/* Allow the page to grow naturally */
+html, body {
+    height: auto !important;
+    min-height: 100% !important;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+/* KPI section: compact 5-column layout */
+.kpis {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: stretch;
+}
+
+.kpi-score {
+    grid-column: span 1 !important;
+}
+
+/* Main dashboard */
+.layout {
+    flex: none !important;
+    min-height: 760px !important;
+    grid-template-columns: minmax(0, 1fr) 390px !important;
+    align-items: stretch;
+}
+
+.main-col {
+    min-height: 720px !important;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Give topology adequate space */
+.canvas {
+    flex: none !important;
+    height: 480px !important;
+    min-height: 480px !important;
+    width: 100%;
+    overflow: hidden;
+}
+
+#graph {
+    width: 100%;
+    height: 100%;
+}
+
+/* Timeline */
+.timeline {
+    flex: none !important;
+}
+
+/* Side panels */
+.side {
+    overflow-y: visible !important;
+    min-height: 0;
+}
+
+/* Tablet */
+@media (max-width: 1100px) {
+    .layout {
+        grid-template-columns: 1fr !important;
+        min-height: auto !important;
+    }
+
+    .main-col {
+        min-height: auto !important;
+    }
+
+    .kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .kpi-score {
+        grid-column: span 2 !important;
+    }
+
+    .canvas {
+        height: 480px !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .layout {
+        padding: 0 12px 20px;
+    }
+
+    .canvas {
+        height: 400px !important;
+        min-height: 400px !important;
+    }
+}
