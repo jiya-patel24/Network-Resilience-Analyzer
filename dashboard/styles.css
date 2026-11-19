@@ -443,3 +443,17 @@ body {
         min-height: 400px !important;
     }
 }
+
+/* ===== Right panel scrolls inside the height of the left column ===== */
+@media (min-width: 1101px) {
+  .layout {
+    align-items: stretch !important;   /* both columns get the same height */
+  }
+
+  .side {
+    contain: size;                     /* "don't let my content decide the row height" */
+    overflow-y: auto !important;       /* scroll inside this box instead */
+    min-height: 0 !important;
+    padding-right: 6px;
+  }
+}
