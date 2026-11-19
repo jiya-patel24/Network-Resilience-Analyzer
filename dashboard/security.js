@@ -34,7 +34,39 @@ const _rs = renderSelected;
 renderSelected = function () { _rs(); inspectorExtra(); };
 const _sf = suggestFixes;   // advisor must respect the segmentation policy
 suggestFixes = function (v, limit = 3) {
-  return _sf(v, 12).filter((s) => !violates(v.byId.get(s.a), v.byId.get(s.b))).slice(0, limit);
+  suggestFixes = function (v, limit = 3) {
+  const { nodes, edges, removed, an } = v;
+  const existing = new Set(edges.map((e) => keyOf(e.source, e.target)));
+  const used = new Set(), out = [];
+  const ranked = [...an.critical].sort((a, b) => an.severity.get(b) - an.severity.get(a));
+  // the 6 least-connected devices in a group are the best places for a new link
+  const lowDegree = (group) => [...group].sort((x, y) => an.adj.get(x).size - an.adj.get(y).size).slice(0, 6);
+
+  for (const ap of ranked) {
+    const seen = new Set([ap]), pieces = [];
+    for (const nb of an.adj.get(ap)) if (!seen.has(nb)) pieces.push(bfs(an.adj, nb, seen));
+    if (pieces.length < 2) continue;
+    pieces.sort((a, b) => b.length - a.length);
+
+    let done = false;
+    for (const a of lowDegree(pieces[0])) {
+      for (const b of lowDegree(pieces[1])) {
+        const key = keyOf(a, b);
+        if (used.has(key) || existing.has(key)) continue;
+        if (violates(v.byId.get(a), v.byId.get(b))) continue;   // respect zone policy
+        used.add(key);
+        const an2 = analyze(nodes, edges.concat([{ source: a, target: b }]), removed);
+        out.push({ a, b, ap, resolves: !an2.critical.has(ap), gain: an2.score - an.score, after: an2.score });
+        done = true;
+        break;
+      }
+      if (done) break;
+    }
+  }
+  return out.filter((s) => s.gain > 0 || s.resolves)
+            .sort((x, y) => y.gain - x.gain || Number(y.resolves) - Number(x.resolves))
+            .slice(0, limit);
+};
 };
 
 /* ---------- ranking by composite risk index ---------- */
